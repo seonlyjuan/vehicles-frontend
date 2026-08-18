@@ -31,17 +31,33 @@ export function useGoogleAuth() {
 
     let mounted = true;
     const finishAuthentication = async () => {
-      const code = new URLSearchParams(window.location.search).get('code');
+      const params = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      const oauthError = params.get('error_description') ?? params.get('error');
+      const code = params.get('code');
+      const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
+
+      if (oauthError) {
+        if (mounted) {
+          setError(oauthError);
+          setIsInitializing(false);
+        }
+        return;
+      }
+
       const result = code
         ? await supabase.auth.exchangeCodeForSession(code)
-        : await supabase.auth.getSession();
+        : accessToken && refreshToken
+          ? await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+          : await supabase.auth.getSession();
 
       if (!mounted) return;
       if (result.error) {
         setError(result.error.message);
       } else {
         setUser(toAppUser(result.data.session?.user));
-        if (code) window.history.replaceState({}, document.title, window.location.pathname);
+        if (code || accessToken) window.history.replaceState({}, document.title, window.location.pathname);
       }
       setIsInitializing(false);
     };
