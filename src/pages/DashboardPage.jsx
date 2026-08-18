@@ -1,20 +1,37 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function DashboardPage({ user, onSignOut }) {
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' oder 'profile'
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const navigate = useNavigate();
 
   return (
     <div className="dashboard-wrapper">
       <header className="dashboard-header">
-        <div className="account-menu" onClick={() => setActiveTab('profile')} style={{cursor: 'pointer'}}>
+        
+        {/* Profil*/}
+        <div className="signout-small" onClick={() => setActiveTab('profile')}>
           {user.picture ? (
             <img className="avatar-small" src={user.picture} alt="Profilbild" />
           ) : (
             <div className="avatar-small-placeholder">{user.name?.charAt(0)}</div>
           )}
-          <span className="account-name">{user.name}</span>
+
         </div>
-        <button className="signout-small" onClick={onSignOut}>Abmelden</button>
+
+        {/* Rechte Header-Aktionen (Buttons) */}
+        <div className="header-actions">
+          <Link to="/listing">
+            <button className="signout-small">
+              Inserate
+            </button>
+          </Link>
+
+          <button className="signout-small" onClick={onSignOut}>
+            Abmelden
+          </button>
+        </div>
+
       </header>
 
       <main className="page">
