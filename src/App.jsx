@@ -1,6 +1,7 @@
 // client/src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useGoogleAuth } from './hooks/useGoogleAuth';
+import { MainLayout } from './pages/MainLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
 
@@ -9,7 +10,6 @@ import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateLi
 
 import { CarListing } from './pages/vehicles/cars/listing/ListingPage';
 import { CreateCarListing } from './pages/vehicles/cars/listing/CreateListingPage';
-
 
 import { MotorbikeListing } from './pages/vehicles/motorbikes/listing/ListingPage';
 import { CreateMotorbikeListing } from './pages/vehicles/motorbikes/listing/CreateListingPage';
@@ -30,31 +30,30 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Startseite */}
-        <Route 
-          path="/" 
-          element={
-            auth.user ? (
-              <DashboardPage user={auth.user} onSignOut={auth.signOut} />
-            ) : (
-              <LoginPage auth={auth} />
-            )
-          } 
-        />
+        {/* Nicht-eingeloggte User sehen nur die Login-Seite */}
+        {!auth.user ? (
+          <>
+            <Route path="/" element={<LoginPage auth={auth} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        ) : (
+          /* Eingeloggte User nutzen automatisch das MainLayout für alle Routen */
+          <Route element={<MainLayout user={auth.user} onSignOut={auth.signOut} />}>
+            <Route path="/" element={<DashboardPage user={auth.user} onSignOut={auth.signOut} />} />
 
-        {/* 2. Hier die Route für listings */}
-        <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
-        <Route path="/vehicles/bicycles/listing/create" element={<CreateBicycleListing />} />
+            <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
+            <Route path="/vehicles/bicycles/listing/create" element={<CreateBicycleListing />} />
 
-        <Route path="/vehicles/cars/listing" element={<CarListing />} />
-        <Route path="/vehicles/cars/listing/create" element={<CreateCarListing />} />
+            <Route path="/vehicles/cars/listing" element={<CarListing />} />
+            <Route path="/vehicles/cars/listing/create" element={<CreateCarListing />} />
 
-        <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
-        <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing />} />
+            <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
+            <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing />} />
 
-
-        {/* Fallback für unbekannte URLs */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Fallback für unbekannte URLs */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        )}
       </Routes>
     </Router>
   );

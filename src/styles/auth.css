@@ -6,9 +6,20 @@
 
 .card { 
   width: 100%; 
-  max-width: 440px; 
+  max-width: 1200px; 
   text-align: center; 
   box-sizing: border-box; 
+}
+
+/* Speziell für die Kategorie-Karte: Inhalt untereinander anordnen */
+.vehicle-menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vehicle-menu-card h2 {
+  margin-bottom: 24px;
 }
 
 .logo { 
@@ -72,14 +83,26 @@ h1 {
   min-height: 100vh; 
 }
 
+/* Header auf Grid umgestellt, damit die Buttons perfekt in der Mitte sitzen */
 .dashboard-header { 
-  display: flex; 
-  justify-content: space-between; 
+  display: grid; 
+  grid-template-columns: auto 1fr auto; /* Links: Profil | Mitte: flexibler Raum | Rechts: Abmelden */
   align-items: center; 
   padding: 16px 24px; 
   width: 100%; 
   box-sizing: border-box; 
   gap: 16px;
+}
+
+/* Hält den Abmelden-Button rechtsbündig */
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Unsichtbarer Platzhalter rechts, falls benötigt */
+.header-spacer {
+  width: 32px; 
 }
 
 .account-menu { 
@@ -104,7 +127,7 @@ h1 {
   justify-content: center; 
 }
 
-.signout-small { 
+.general_button { 
   padding: 4px 10px; 
 }
 
@@ -123,10 +146,15 @@ h1 {
 /* Smartphone Optimierungen */
 @media (max-width: 600px) { 
   .dashboard-header { 
+    display: flex;
     flex-direction: column; 
     align-items: stretch; 
     gap: 12px; 
   } 
+
+  .header-spacer {
+    display: none; 
+  }
 
   .dashboard-header > div { 
     justify-content: center; 
@@ -137,4 +165,48 @@ h1 {
   .card { 
     padding: 38px 24px; 
   } 
+}
+
+/* Container für die zentrierten Fahrzeug-Buttons nebeneinander */
+.center-vehicle-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.center-vehicle-buttons a {
+  text-decoration: none;
+}
+
+/* Der Button als Flexbox, damit Emoji oben und Text unten sitzen */
+.large-vehicle-btn {
+  display: flex;
+  flex-direction: column;    /* Untereinander angeordnet (Emoji oben, Text unten) */
+  justify-content: space-between; /* Verteilt den Platz optimal */
+  align-items: center;       /* Horizontal zentriert */
+  
+  width: 300px;              /* Feste Breite */
+  height: 400px;             /* Feste Höhe */
+  padding: 24px 16px;        /* Innenabstand */
+  
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 16px;       
+  background-color: #ffffff; 
+  border: 2px solid #e0e0e0; 
+}
+
+/* Das Emoji im Button */
+.large-vehicle-btn .emoji {
+  font-size: 200px;           
+  line-height: 1;
+}
+
+/* Der Text unten im Button */
+.large-vehicle-btn .text {
+  font-size: 18px;           
 }
