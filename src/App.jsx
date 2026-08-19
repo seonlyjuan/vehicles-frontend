@@ -4,7 +4,7 @@ import { useGoogleAuth } from './hooks/useGoogleAuth';
 import { MainLayout } from './pages/MainLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
-import { ProfilePage } from './pages/ProfilePage'; // Neu: Profil-Komponente importiert
+import { ProfilePage } from './pages/ProfilePage';
 
 import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
 import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateListingPage';
@@ -42,17 +42,17 @@ function App() {
           <Route element={<MainLayout user={auth.user} onSignOut={auth.signOut} />}>
             <Route path="/" element={<DashboardPage user={auth.user} />} />
             
-            {/* Neu: Die Profil-Route */}
             <Route path="/profile" element={<ProfilePage user={auth.user} />} />
 
             <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
-            <Route path="/vehicles/bicycles/listing/create" element={<CreateBicycleListing />} />
+            {/* Hier wird der user-Prop übergeben: */}
+            <Route path="/vehicles/bicycles/listing/create" element={<CreateBicycleListing user={auth.user} />} />
 
             <Route path="/vehicles/cars/listing" element={<CarListing />} />
-            <Route path="/vehicles/cars/listing/create" element={<CreateCarListing />} />
+            <Route path="/vehicles/cars/listing/create" element={<CreateCarListing user={auth.user} />} />
 
             <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
-            <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing />} />
+            <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing user={auth.user} />} />
 
             {/* Fallback für unbekannte URLs */}
             <Route path="*" element={<Navigate to="/" replace />} />
