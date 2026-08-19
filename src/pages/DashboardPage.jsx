@@ -9,28 +9,43 @@ export function DashboardPage({ user, onSignOut }) {
     <div className="dashboard-wrapper">
       <header className="dashboard-header">
         
-        {/* Profil*/}
-        <div className="signout-small" onClick={() => setActiveTab('profile')}>
+        {/* Profil (Klasse von signout-small auf was Eigenes geändert) */}
+        <div className="profile-avatar-wrapper" onClick={() => setActiveTab('profile')} style={{ cursor: 'pointer' }}>
           {user.picture ? (
             <img className="avatar-small" src={user.picture} alt="Profilbild" />
           ) : (
             <div className="avatar-small-placeholder">{user.name?.charAt(0)}</div>
           )}
-
         </div>
 
-        {/* Rechte Header-Aktionen (Buttons) */}
+        {/* Rechte Header-Aktionen (Jetzt sauber mit nur einem Wrapper) */}
         <div className="header-actions">
-          <Link to="/listing">
+          <Link to="/vehicles/bicycles/listing">
             <button className="signout-small">
-              Inserate
+              Fahrräder
             </button>
           </Link>
+
+
+          <Link to="/vehicles/cars/listing">
+            <button className="signout-small">
+              Autos
+            </button>
+          </Link>
+
+
+          <Link to="/vehicles/motorbikes/listing">
+            <button className="signout-small">
+              Motorräder
+            </button>
+          </Link>
+
 
           <button className="signout-small" onClick={onSignOut}>
             Abmelden
           </button>
         </div>
+
 
       </header>
 

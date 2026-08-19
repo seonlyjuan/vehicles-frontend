@@ -3,8 +3,17 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useGoogleAuth } from './hooks/useGoogleAuth';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
-import { ListingPage } from './pages/listing/ListingPage';
-import { CreateListingPage } from './pages/listing/CreateListingPage';
+
+import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
+import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateListingPage';
+
+import { CarListing } from './pages/vehicles/cars/listing/ListingPage';
+import { CreateCarListing } from './pages/vehicles/cars/listing/CreateListingPage';
+
+
+import { MotorbikeListing } from './pages/vehicles/motorbikes/listing/ListingPage';
+import { CreateMotorbikeListing } from './pages/vehicles/motorbikes/listing/CreateListingPage';
+
 import './styles/auth.css';
 
 function App() {
@@ -34,8 +43,15 @@ function App() {
         />
 
         {/* 2. Hier die Route für listings */}
-        <Route path="/listing" element={<ListingPage />} />
-        <Route path="/listing/create" element={<CreateListingPage />} />
+        <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
+        <Route path="/vehicles/bicycles/listing/create" element={<CreateBicycleListing />} />
+
+        <Route path="/vehicles/cars/listing" element={<CarListing />} />
+        <Route path="/vehicles/cars/listing/create" element={<CreateCarListing />} />
+
+        <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
+        <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing />} />
+
 
         {/* Fallback für unbekannte URLs */}
         <Route path="*" element={<Navigate to="/" replace />} />

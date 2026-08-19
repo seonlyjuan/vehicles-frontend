@@ -1,7 +1,7 @@
 // client/src/pages/listing/CreateListingPage.jsx
 import React from 'react';
 
-export function CreateListingPage() {
+export function CreateCarListing() {
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Listing erstellen</h1>
