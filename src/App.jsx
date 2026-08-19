@@ -4,6 +4,7 @@ import { useGoogleAuth } from './hooks/useGoogleAuth';
 import { MainLayout } from './pages/MainLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
+import { ProfilePage } from './pages/ProfilePage'; // Neu: Profil-Komponente importiert
 
 import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
 import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateListingPage';
@@ -39,7 +40,10 @@ function App() {
         ) : (
           /* Eingeloggte User nutzen automatisch das MainLayout für alle Routen */
           <Route element={<MainLayout user={auth.user} onSignOut={auth.signOut} />}>
-            <Route path="/" element={<DashboardPage user={auth.user} onSignOut={auth.signOut} />} />
+            <Route path="/" element={<DashboardPage user={auth.user} />} />
+            
+            {/* Neu: Die Profil-Route */}
+            <Route path="/profile" element={<ProfilePage user={auth.user} />} />
 
             <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
             <Route path="/vehicles/bicycles/listing/create" element={<CreateBicycleListing />} />

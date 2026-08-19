@@ -12,7 +12,7 @@ export function MainLayout({ user, onSignOut }) {
       */}
       <header 
         className="dashboard-header" 
-        style={{ backgroundColor: '#ffcccc', borderBottom: '3px solid red' }}
+        style={{ backgroundColor: '#6ac8ff', borderBottom: '3px solid blue' }}
       >
         {/* 1. Profil (ganz links) */}
         <div 
