@@ -1,6 +1,6 @@
 import { useNavigate, Outlet } from 'react-router-dom';
 
-export function MainLayout({ user, onSignOut }) {
+export function MainLayout({ onSignOut }) {
   const navigate = useNavigate();
 
   return (
@@ -14,16 +14,10 @@ export function MainLayout({ user, onSignOut }) {
         style={{ backgroundColor: '#6ac8ff', borderBottom: '3px solid blue' }}
       >
         {/* 1. Profil (ganz links) */}
-        <div 
-          className="profile-avatar-wrapper" 
-          onClick={() => navigate('/profile')} 
-          style={{ cursor: 'pointer' }}
-        >
-          {user?.picture ? (
-            <img className="avatar-small" src={user.picture} alt="Profilbild" />
-          ) : (
-            <div className="avatar-small-placeholder">{user?.name?.charAt(0)}</div>
-          )}
+        <div>
+          <button className="general_button" onClick={() => navigate('/profile')}>
+            Profil
+          </button>
         </div>
 
         {/* Platzhalter in der Mitte */}

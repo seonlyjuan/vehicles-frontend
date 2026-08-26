@@ -58,7 +58,7 @@ export function UsernamePage({ user, updateUsername }) {
         </button>
       </form>
 
-      {!isFirstSelection && <Link to="/profile">Zurück zum Profil</Link>}
+      <Link to="/profile">Zurück zum Profil</Link>
     </div>
   );
 }

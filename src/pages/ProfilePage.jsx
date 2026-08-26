@@ -13,22 +13,25 @@ export function ProfilePage({ user }) {
         </Link>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', margin: '20px 0' }}>
-        {user?.picture ? (
-          <img className="avatar" src={user.picture} alt="Profil" style={{ width: '80px', height: '80px', borderRadius: '50%' }} />
-        ) : (
-          <div className="avatar-small-placeholder" style={{ width: '80px', height: '80px', fontSize: '32px' }}>
-            {user?.name?.charAt(0)}
-          </div>
-        )}
-        <div>
-          <p style={{ margin: '0 0 8px 0' }}><strong>Name:</strong> {user?.name}</p>
-          <p style={{ margin: '0 0 8px 0' }}><strong>Username:</strong> @{user?.username}</p>
-          <p style={{ margin: 0 }}><strong>E-Mail:</strong> {user?.email}</p>
-        </div>
+      <div style={{ margin: '20px 0' }}>
+        <p style={{ margin: '0 0 8px 0' }}><strong>Name:</strong> {user?.name}</p>
+        <p style={{ margin: '0 0 8px 0' }}>
+          <strong>Username:</strong> {user?.username ? `@${user.username}` : 'Noch nicht festgelegt'}
+        </p>
+        <p style={{ margin: 0 }}><strong>E-Mail:</strong> {user?.email}</p>
       </div>
 
-      <Link to="/profile/username" className="username-edit-link">Username ändern</Link>
+      <Link to="/profile/username" className="username-edit-link">
+        <button className="general_button">
+          {user?.username ? 'Username ändern' : 'Username festlegen'}
+        </button>
+      </Link>
+
+      <div>
+        <Link to="/profile/listings">
+          <button className="general_button">Meine Inserate</button>
+        </Link>
+      </div>
 
       <section className="create-listing-section" aria-labelledby="create-listing-heading">
         <h3 id="create-listing-heading">Inserat erstellen</h3>

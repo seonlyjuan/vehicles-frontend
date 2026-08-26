@@ -28,3 +28,18 @@ export async function createVehicleListing({ vehicleType, payload, files }) {
 export function getVehicleListings(vehicleType, page) {
   return apiRequest(`/vehicles/${vehicleType}?page=${page}&per_page=30`);
 }
+
+export function getVehicleListing(vehicleType, vehicleId) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}`);
+}
+
+export function updateVehicleImageOrder(vehicleType, vehicleId, imageIds) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}/images/order`, {
+    method: 'PUT',
+    body: { image_ids: imageIds },
+  });
+}
+
+export function getProfileListings() {
+  return apiRequest('/profile/listings');
+}
