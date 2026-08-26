@@ -131,6 +131,119 @@ h1 {
   padding: 4px 10px; 
 }
 
+.create-listing-section {
+  border-top: 1px solid #e0e0e0;
+  margin-top: 24px;
+  padding-top: 24px;
+}
+
+.create-listing-section h3,
+.create-listing-section p {
+  margin-top: 0;
+}
+
+.create-listing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.create-listing-actions a {
+  text-decoration: none;
+}
+
+.username-edit-link {
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.username-card {
+  max-width: 520px;
+  text-align: left;
+}
+
+.username-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.username-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.username-input input {
+  min-width: 0;
+  padding: 6px;
+}
+
+.listing-form {
+  display: grid;
+  gap: 16px;
+}
+
+.listing-form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.listing-form input,
+.listing-form textarea {
+  box-sizing: border-box;
+  padding: 8px;
+  width: 100%;
+}
+
+.vehicle-listings-card {
+  text-align: left;
+}
+
+.vehicle-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.vehicle-listing {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  padding-bottom: 14px;
+}
+
+.vehicle-listing h3,
+.vehicle-listing p,
+.vehicle-listing strong {
+  display: block;
+  margin: 12px 14px 0;
+}
+
+.vehicle-listing-image {
+  display: block;
+  height: 170px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.vehicle-listing-image-placeholder {
+  align-items: center;
+  background: #f1f1f1;
+  color: #666;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
 .dashboard-wrapper .page { 
   flex: 1; 
   display: grid; 

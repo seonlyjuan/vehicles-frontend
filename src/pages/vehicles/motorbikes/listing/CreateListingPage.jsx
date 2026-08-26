@@ -1,164 +1,50 @@
-// client/src/pages/vehicles/motorbikes/listing/CreateListingPage.jsx
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-export function CreateMotorbikeListing({ user }) {
+import { createVehicleListing } from '../../../../api/vehicles';
+
+export function CreateMotorbikeListing() {
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    title: '',
-    brand: '',
-    model: '',
-    year: '',
-    price: '',
-    description: ''
-  });
-
+  const [formData, setFormData] = useState({ title: '', brand: '', model: '', year: '', price: '', description: '' });
+  const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
     setLoading(true);
     setErrorMessage('');
 
-    // Payload: Supabase-UUID (profile_id) + Formulardaten für Motorräder
-    const payload = {
-      profile_id: user?.id, 
-      ...formData
-    };
-
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/motorbikes/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
+      await createVehicleListing({
+        vehicleType: 'motorbikes',
+        payload: { ...formData, year: formData.year ? Number(formData.year) : null, price: Number(formData.price) },
+        files,
       });
-
-      if (!response.ok) {
-        throw new Error('Fehler beim Speichern des Motorrad-Inserats.');
-      }
-
-      const result = await response.json();
-      console.log('Motorrad erfolgreich gespeichert:', result);
-
       navigate('/vehicles/motorbikes/listing');
-
-    } catch (err) {
-      console.error(err);
-      setErrorMessage('Das Inserat konnte nicht gespeichert werden. Bitte versuche es erneut.');
+    } catch (error) {
+      setErrorMessage(error.message || 'Das Inserat konnte nicht gespeichert werden.');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="card" style={{ margin: '0 auto', textAlign: 'left', maxWidth: '600px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <h2 style={{ margin: 0 }}>Neues Motorrad-Inserat</h2>
-        <Link to="/vehicles/motorbikes/listing" style={{ textDecoration: 'none' }}>
-          <button className="general_button">← Abbrechen</button>
-        </Link>
+        <Link to="/vehicles/motorbikes/listing"><button className="general_button">Abbrechen</button></Link>
       </div>
-
-      {errorMessage && (
-        <p style={{ color: 'red', marginBottom: '16px' }}>{errorMessage}</p>
-      )}
-
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div>
-          <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Titel:</label>
-          <input 
-            type="text" 
-            name="title" 
-            value={formData.title} 
-            onChange={handleChange} 
-            required 
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-            placeholder="z.B. Yamaha MT-07 Naked Bike"
-          />
-        </div>
-
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Marke:</label>
-            <input 
-              type="text" 
-              name="brand" 
-              value={formData.brand} 
-              onChange={handleChange} 
-              required 
-              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-              placeholder="z.B. Yamaha"
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Modell:</label>
-            <input 
-              type="text" 
-              name="model" 
-              value={formData.model} 
-              onChange={handleChange} 
-              required 
-              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-              placeholder="z.B. MT-07"
-            />
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Baujahr:</label>
-            <input 
-              type="number" 
-              name="year" 
-              value={formData.year} 
-              onChange={handleChange} 
-              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-              placeholder="z.B. 2021"
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Preis (€):</label>
-            <input 
-              type="number" 
-              name="price" 
-              value={formData.price} 
-              onChange={handleChange} 
-              required 
-              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-              placeholder="z.B. 6800"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold' }}>Beschreibung:</label>
-          <textarea 
-            name="description" 
-            value={formData.description} 
-            onChange={handleChange} 
-            rows="4"
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-            placeholder="Kilometerstand, TÜV, Zustand etc."
-          />
-        </div>
-
-        <button 
-          type="submit" 
-          className="general_button" 
-          disabled={loading}
-          style={{ marginTop: '10px', padding: '10px', cursor: 'pointer' }}
-        >
-          {loading ? 'Wird gespeichert...' : 'Motorrad-Inserat veröffentlichen'}
-        </button>
+      {errorMessage && <p className="error" role="alert">{errorMessage}</p>}
+      <form onSubmit={handleSubmit} className="listing-form">
+        <label>Titel<input name="title" value={formData.title} onChange={(event) => setFormData({ ...formData, title: event.target.value })} required /></label>
+        <label>Marke<input name="brand" value={formData.brand} onChange={(event) => setFormData({ ...formData, brand: event.target.value })} required /></label>
+        <label>Modell<input name="model" value={formData.model} onChange={(event) => setFormData({ ...formData, model: event.target.value })} required /></label>
+        <label>Baujahr<input type="number" min="1886" max="2100" name="year" value={formData.year} onChange={(event) => setFormData({ ...formData, year: event.target.value })} /></label>
+        <label>Preis (€)<input type="number" min="0" step="0.01" name="price" value={formData.price} onChange={(event) => setFormData({ ...formData, price: event.target.value })} required /></label>
+        <label>Beschreibung<textarea name="description" rows="4" value={formData.description} onChange={(event) => setFormData({ ...formData, description: event.target.value })} /></label>
+        <label>Bilder (optional, maximal 6)<input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(event) => setFiles(Array.from(event.target.files ?? []))} /></label>
+        <button type="submit" className="general_button" disabled={loading}>{loading ? 'Wird gespeichert …' : 'Inserat veröffentlichen'}</button>
       </form>
     </div>
   );
