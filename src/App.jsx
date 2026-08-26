@@ -1,11 +1,13 @@
 // client/src/App.jsx
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useGoogleAuth } from './hooks/useGoogleAuth';
 import { MainLayout } from './pages/MainLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { ProfileListingsPage } from './pages/ProfileListingsPage';
 import { UsernamePage } from './pages/UsernamePage';
+import { VehicleListingDetailPage } from './pages/VehicleListingDetailPage';
 
 import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
 import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateListingPage';
@@ -42,10 +44,10 @@ function App() {
           /* Eingeloggte User nutzen automatisch das MainLayout für alle Routen */
           <Route element={<MainLayout user={auth.user} onSignOut={auth.signOut} />}>
             <Route path="/profile/username" element={<UsernamePage user={auth.user} updateUsername={auth.updateUsername} />} />
-            <Route element={auth.user.username ? <Outlet /> : <Navigate to="/profile/username" replace />}>
-                <Route path="/" element={<DashboardPage />} />
+            <Route path="/" element={<DashboardPage />} />
             
             <Route path="/profile" element={<ProfilePage user={auth.user} />} />
+            <Route path="/profile/listings" element={<ProfileListingsPage />} />
 
             <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
             {/* Hier wird der user-Prop übergeben: */}
@@ -57,9 +59,12 @@ function App() {
             <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
             <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing user={auth.user} />} />
 
+            <Route path="/vehicles/bicycles/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="bicycles" user={auth.user} />} />
+            <Route path="/vehicles/cars/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="cars" user={auth.user} />} />
+            <Route path="/vehicles/motorbikes/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="motorbikes" user={auth.user} />} />
+
             {/* Fallback für unbekannte URLs */}
             <Route path="*" element={<Navigate to="/" replace />} />
-            </Route>
           </Route>
         )}
       </Routes>
