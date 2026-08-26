@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 export function ProfilePage({ user }) {
@@ -24,9 +23,28 @@ export function ProfilePage({ user }) {
         )}
         <div>
           <p style={{ margin: '0 0 8px 0' }}><strong>Name:</strong> {user?.name}</p>
+          <p style={{ margin: '0 0 8px 0' }}><strong>Username:</strong> @{user?.username}</p>
           <p style={{ margin: 0 }}><strong>E-Mail:</strong> {user?.email}</p>
         </div>
       </div>
+
+      <Link to="/profile/username" className="username-edit-link">Username ändern</Link>
+
+      <section className="create-listing-section" aria-labelledby="create-listing-heading">
+        <h3 id="create-listing-heading">Inserat erstellen</h3>
+        <p>Wähle die Kategorie für dein neues Inserat.</p>
+        <div className="create-listing-actions">
+          <Link to="/vehicles/bicycles/listing/create">
+            <button className="general_button">Fahrrad-Inserat erstellen</button>
+          </Link>
+          <Link to="/vehicles/cars/listing/create">
+            <button className="general_button">Auto-Inserat erstellen</button>
+          </Link>
+          <Link to="/vehicles/motorbikes/listing/create">
+            <button className="general_button">Motorrad-Inserat erstellen</button>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

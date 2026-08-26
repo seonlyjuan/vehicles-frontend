@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { apiRequest } from '../api/client';
 
 function toAppUser(user) {
   if (!user) return null;
@@ -19,13 +20,29 @@ export function useGoogleAuth() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(() => isSupabaseConfigured);
 
+  const loadUserProfile = useCallback(async (authUser) => {
+    const appUser = toAppUser(authUser);
+    if (!appUser || !supabase) {
+      setUser(appUser);
+      return;
+    }
+
+    try {
+      const profile = await apiRequest('/profile');
+      setUser({ ...appUser, username: profile.username ?? null });
+    } catch (profileError) {
+      setError(profileError.message);
+      setUser({ ...appUser, username: null });
+    }
+  }, []);
+
   useEffect(() => {
     if (!supabase) {
       return undefined;
     }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(toAppUser(session?.user));
+      void loadUserProfile(session?.user);
       setIsInitializing(false);
     });
 
@@ -56,7 +73,7 @@ export function useGoogleAuth() {
       if (result.error) {
         setError(result.error.message);
       } else {
-        setUser(toAppUser(result.data.session?.user));
+        await loadUserProfile(result.data.session?.user);
         if (code || accessToken) window.history.replaceState({}, document.title, window.location.pathname);
       }
       setIsInitializing(false);
@@ -68,7 +85,7 @@ export function useGoogleAuth() {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [loadUserProfile]);
 
   const signInWithGoogle = useCallback(async () => {
     if (!supabase) return;
@@ -95,5 +112,17 @@ export function useGoogleAuth() {
     if (signOutError) setError(signOutError.message);
   }, []);
 
-  return { user, error, isLoading, isInitializing, signInWithGoogle, isGoogleConfigured: isSupabaseConfigured, signOut };
+  const updateUsername = useCallback(async (username) => {
+    if (!supabase || !user) throw new Error('Keine aktive Sitzung gefunden.');
+
+    const normalizedUsername = username.trim().toLowerCase();
+    const data = await apiRequest('/profile/username', {
+      method: 'PUT',
+      body: { username: normalizedUsername },
+    });
+
+    setUser((currentUser) => ({ ...currentUser, username: data }));
+  }, [user]);
+
+  return { user, error, isLoading, isInitializing, signInWithGoogle, isGoogleConfigured: isSupabaseConfigured, signOut, updateUsername };
 }

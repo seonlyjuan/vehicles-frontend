@@ -1,10 +1,11 @@
 // client/src/App.jsx
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { useGoogleAuth } from './hooks/useGoogleAuth';
 import { MainLayout } from './pages/MainLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { UsernamePage } from './pages/UsernamePage';
 
 import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
 import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateListingPage';
@@ -40,7 +41,9 @@ function App() {
         ) : (
           /* Eingeloggte User nutzen automatisch das MainLayout für alle Routen */
           <Route element={<MainLayout user={auth.user} onSignOut={auth.signOut} />}>
-            <Route path="/" element={<DashboardPage user={auth.user} />} />
+            <Route path="/profile/username" element={<UsernamePage user={auth.user} updateUsername={auth.updateUsername} />} />
+            <Route element={auth.user.username ? <Outlet /> : <Navigate to="/profile/username" replace />}>
+                <Route path="/" element={<DashboardPage />} />
             
             <Route path="/profile" element={<ProfilePage user={auth.user} />} />
 
@@ -56,6 +59,7 @@ function App() {
 
             {/* Fallback für unbekannte URLs */}
             <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
           </Route>
         )}
       </Routes>
