@@ -41,19 +41,25 @@ export function useGoogleAuth() {
       return undefined;
     }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      void loadUserProfile(session?.user);
-      setIsInitializing(false);
+    let mounted = true;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'INITIAL_SESSION') return;
+
+      // Run profile/API requests outside Supabase's auth callback to avoid
+      // blocking the auth client's internal session lock.
+      window.setTimeout(() => {
+        if (!mounted) return;
+        void loadUserProfile(session?.user).finally(() => {
+          if (mounted) setIsInitializing(false);
+        });
+      }, 0);
     });
 
-    let mounted = true;
     const finishAuthentication = async () => {
       const params = new URLSearchParams(window.location.search);
       const hashParams = new URLSearchParams(window.location.hash.slice(1));
       const oauthError = params.get('error_description') ?? params.get('error');
-      const code = params.get('code');
-      const accessToken = hashParams.get('access_token');
-      const refreshToken = hashParams.get('refresh_token');
+      const hasAuthParameters = params.has('code') || hashParams.has('access_token') || oauthError;
 
       if (oauthError) {
         if (mounted) {
@@ -63,23 +69,19 @@ export function useGoogleAuth() {
         return;
       }
 
-      const result = code
-        ? await supabase.auth.exchangeCodeForSession(code)
-        : accessToken && refreshToken
-          ? await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
-          : await supabase.auth.getSession();
+      const result = await supabase.auth.getSession();
 
       if (!mounted) return;
       if (result.error) {
         setError(result.error.message);
       } else {
         await loadUserProfile(result.data.session?.user);
-        if (code || accessToken) window.history.replaceState({}, document.title, window.location.pathname);
+        if (hasAuthParameters) window.history.replaceState({}, document.title, window.location.pathname);
       }
-      setIsInitializing(false);
+      if (mounted) setIsInitializing(false);
     };
 
-    finishAuthentication();
+    void finishAuthentication();
 
     return () => {
       mounted = false;

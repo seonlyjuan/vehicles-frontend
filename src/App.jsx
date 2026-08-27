@@ -25,8 +25,8 @@ function App() {
 
   if (auth.isInitializing) {
     return (
-      <main className="page">
-        <p className="status">Sitzung wird geladen …</p>
+      <main className="auth-initializing" role="status" aria-label="Anmeldung wird geprüft">
+        <div className="auth-spinner" aria-hidden="true" />
       </main>
     );
   }
