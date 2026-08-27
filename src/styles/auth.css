@@ -201,6 +201,35 @@ h1 {
   text-align: left;
 }
 
+.vehicle-listings-loading {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 420px;
+  text-align: center;
+}
+
+.vehicle-listings-loading-emoji {
+  animation: vehicle-loading-pulse 1.2s ease-in-out infinite;
+  font-size: clamp(9rem, 25vw, 16rem);
+  line-height: 1;
+}
+
+@keyframes vehicle-loading-pulse {
+  0%, 100% { transform: scale(0.96); }
+  50% { transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+  .vehicle-listings-loading {
+    min-height: 300px;
+  }
+
+  .vehicle-listings-loading-emoji {
+    font-size: clamp(8rem, 48vw, 12rem);
+  }
+}
+
 .profile-listings-header {
   align-items: center;
   display: flex;
