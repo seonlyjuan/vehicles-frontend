@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { getVehicleListings } from '../api/vehicles';
+import { VEHICLE_TYPES } from '../config/vehicleTypes';
 
 export function VehicleListingPage({ vehicleType, title }) {
   const [page, setPage] = useState(1);
@@ -39,7 +40,11 @@ export function VehicleListingPage({ vehicleType, title }) {
       <h2>{title}</h2>
       {error && <p className="error" role="alert">{error}</p>}
       {isLoading ? (
-        <p>Inserate werden geladen …</p>
+        <div className="vehicle-listings-loading" role="status" aria-label="Inserate werden geladen" aria-live="polite">
+          <span className="vehicle-listings-loading-emoji" aria-hidden="true">
+            {VEHICLE_TYPES[vehicleType]?.emoji}
+          </span>
+        </div>
       ) : result.items.length === 0 ? (
         <p className="intro">Noch keine Inserate vorhanden.</p>
       ) : (
