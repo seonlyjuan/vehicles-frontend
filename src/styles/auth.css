@@ -4,6 +4,26 @@
   padding: 24px; 
 }
 
+.auth-initializing {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.auth-spinner {
+  animation: auth-spinner-rotation 0.8s linear infinite;
+  border: 5px solid #dce3ee;
+  border-radius: 50%;
+  border-top-color: #182039;
+  height: 56px;
+  width: 56px;
+}
+
+@keyframes auth-spinner-rotation {
+  to { transform: rotate(360deg); }
+}
+
 .card { 
   width: 100%; 
   max-width: 1200px; 
