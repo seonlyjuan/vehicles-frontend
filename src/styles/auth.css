@@ -95,6 +95,7 @@
 .vehicle-listing p { color: var(--muted); font-size: .93rem; }
 .vehicle-listing strong { color: var(--primary-dark); font-size: 1.08rem; }
 .vehicle-type-label { display: inline-flex; margin: 14px 16px 0; padding: 5px 9px; color: #1d4ed8; background: #eff6ff; border-radius: 999px; font-size: .76rem; font-weight: 800; }
+.vehicle-draft-label { display: inline-flex; margin: 10px 16px 0; padding: 5px 9px; color: #854d0e; background: #fef3c7; border-radius: 999px; font-size: .76rem; font-weight: 800; }
 
 .vehicle-detail-card { max-width: 1000px; }
 .vehicle-detail-card article { margin-top: 26px; }
@@ -111,6 +112,17 @@
 .vehicle-description h3 { margin-top: 0; }
 .vehicle-description p { margin-bottom: 0; line-height: 1.7; white-space: pre-wrap; }
 .pagination { align-items: center; display: flex; gap: 14px; justify-content: center; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--line); }
+
+.payment-card { max-width: 640px; }
+.payment-icon { display: block; font-size: 5rem; line-height: 1; margin-bottom: 18px; }
+.payment-placeholder { margin: 26px 0 18px; padding: 30px 20px; border: 2px dashed #a8bde2; border-radius: 16px; color: #334155; background: #f8fafc; }
+.payment-placeholder strong { color: var(--primary-dark); font-size: 1.25rem; }
+.payment-placeholder p { color: var(--muted); margin: 8px 0 0; }
+.payment-status { margin: 18px 0; padding: 13px 16px; border: 1px solid #fde68a; border-radius: 11px; color: #854d0e; background: #fefce8; font-weight: 700; }
+.payment-status-success { color: #067647; background: #ecfdf3; border-color: #abefc6; }
+.payment-actions { display: flex; justify-content: center; gap: 12px; margin-top: 22px; }
+.payment-actions a { text-decoration: none; }
+.payment-publish-button { color: #fff; background: var(--primary); border-color: var(--primary); }
 
 @media (max-width: 800px) {
   .center-vehicle-buttons { grid-template-columns: 1fr; }
@@ -129,6 +141,8 @@
   .vehicle-listings-header .filter-toggle { width: 100%; }
   .vehicle-filter-range { grid-template-columns: 1fr; }
   .vehicle-filter-actions, .profile-actions, .create-listing-actions { flex-direction: column; }
+  .payment-actions { flex-direction: column; }
+  .payment-actions a, .payment-actions button { width: 100%; }
   .vehicle-filter-actions button, .profile-actions button, .profile-actions a, .create-listing-actions button, .create-listing-actions a { width: 100%; }
   .vehicle-detail-images { grid-template-columns: 1fr; }
   .vehicle-detail-images img { height: 280px; }

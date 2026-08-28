@@ -16,12 +16,12 @@ export function CreateBicycleListing() {
     setErrorMessage('');
 
     try {
-      await createVehicleListing({
+      const listing = await createVehicleListing({
         vehicleType: 'bicycles',
         payload: { ...formData, model: formData.model || null, year: formData.year ? Number(formData.year) : null, price: Number(formData.price) },
         files,
       });
-      navigate('/vehicles/bicycles/listing');
+      navigate(`/vehicles/bicycles/listing/${listing.id}/payment`);
     } catch (error) {
       setErrorMessage(error.message || 'Das Inserat konnte nicht gespeichert werden.');
     } finally {
@@ -44,7 +44,7 @@ export function CreateBicycleListing() {
         <label>Preis (€)<input type="number" min="0" step="0.01" name="price" value={formData.price} onChange={(event) => setFormData({ ...formData, price: event.target.value })} required /></label>
         <label>Beschreibung<textarea name="description" rows="4" value={formData.description} onChange={(event) => setFormData({ ...formData, description: event.target.value })} /></label>
         <label>Bilder (optional, maximal 6)<input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(event) => setFiles(Array.from(event.target.files ?? []))} /></label>
-        <button type="submit" className="general_button" disabled={loading}>{loading ? 'Wird gespeichert …' : 'Inserat veröffentlichen'}</button>
+        <button type="submit" className="general_button" disabled={loading}>{loading ? 'Entwurf wird gespeichert …' : 'Weiter zur Bezahlung'}</button>
       </form>
     </div>
   );
