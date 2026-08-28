@@ -109,6 +109,7 @@ export function VehicleListingDetailPage({ vehicleType, user }) {
           <p><strong>Marke:</strong> {listing.brand}</p>
           {listing.model && <p><strong>Modell:</strong> {listing.model}</p>}
           {listing.year && <p><strong>Jahr:</strong> {listing.year}</p>}
+          {listing.power != null && <p><strong>Leistung:</strong> {listing.power} PS</p>}
           <p><strong>Preis:</strong> € {Number(listing.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</p>
 
           <section className="vehicle-description">
