@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getVehicleFilterMetadata, getVehicleListings } from '../api/vehicles';
 import { VEHICLE_TYPES } from '../config/vehicleTypes';
 import { VehicleFilters } from './VehicleFilters';
+import { formatCurrency } from '../utils/formatCurrency';
 
 export function VehicleListingPage({ vehicleType, title }) {
   const [page, setPage] = useState(1);
@@ -122,7 +123,7 @@ export function VehicleListingPage({ vehicleType, title }) {
                 <h3>{listing.title}</h3>
                 <p>{listing.brand}{listing.model ? ` ${listing.model}` : ''}{listing.year ? ` (${listing.year})` : ''}</p>
                 {listing.power != null && <p>{listing.power} PS</p>}
-                <strong>€ {Number(listing.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</strong>
+                <strong>{formatCurrency(listing.price)}</strong>
               </article>
               </Link>
             ))}
