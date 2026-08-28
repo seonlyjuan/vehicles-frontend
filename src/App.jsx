@@ -9,15 +9,13 @@ import { ProfileListingsPage } from './pages/ProfileListingsPage';
 import { UsernamePage } from './pages/UsernamePage';
 import { VehicleListingDetailPage } from './pages/VehicleListingDetailPage';
 import { VehiclePaymentPage } from './pages/VehiclePaymentPage';
+import { CreateVehicleListingPage } from './pages/CreateVehicleListingPage';
 
 import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
-import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateListingPage';
 
 import { CarListing } from './pages/vehicles/cars/listing/ListingPage';
-import { CreateCarListing } from './pages/vehicles/cars/listing/CreateListingPage';
 
 import { MotorbikeListing } from './pages/vehicles/motorbikes/listing/ListingPage';
-import { CreateMotorbikeListing } from './pages/vehicles/motorbikes/listing/CreateListingPage';
 
 import './styles/auth.css';
 
@@ -52,13 +50,11 @@ function App() {
 
             <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
             {/* Hier wird der user-Prop übergeben: */}
-            <Route path="/vehicles/bicycles/listing/create" element={<CreateBicycleListing user={auth.user} />} />
 
             <Route path="/vehicles/cars/listing" element={<CarListing />} />
-            <Route path="/vehicles/cars/listing/create" element={<CreateCarListing user={auth.user} />} />
 
             <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
-            <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing user={auth.user} />} />
+            <Route path="/vehicles/:vehicleType/listing/create" element={<CreateVehicleListingPage />} />
 
             <Route path="/vehicles/:vehicleType/listing/:vehicleId/payment" element={<VehiclePaymentPage />} />
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { getVehicleListing, updateVehicleImageOrder } from '../api/vehicles';
+import { formatCurrency } from '../utils/formatCurrency';
 
 const VEHICLE_TYPE_LABELS = {
   bicycles: 'Fahrrad',
@@ -110,7 +111,7 @@ export function VehicleListingDetailPage({ vehicleType, user }) {
           {listing.model && <p><strong>Modell:</strong> {listing.model}</p>}
           {listing.year && <p><strong>Jahr:</strong> {listing.year}</p>}
           {listing.power != null && <p><strong>Leistung:</strong> {listing.power} PS</p>}
-          <p><strong>Preis:</strong> € {Number(listing.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</p>
+          <p><strong>Preis:</strong> {formatCurrency(listing.price)}</p>
 
           <section className="vehicle-description">
             <h3>Beschreibung</h3>

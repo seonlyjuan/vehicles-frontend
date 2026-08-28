@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { getProfileListings } from '../api/vehicles';
+import { formatCurrency } from '../utils/formatCurrency';
 
 const VEHICLE_TYPE_LABELS = {
   bicycles: 'Fahrrad',
@@ -69,7 +70,7 @@ export function ProfileListingsPage() {
                 {listing.status === 'draft' && <span className="vehicle-draft-label">Entwurf – Zahlung fortsetzen</span>}
                 <h3>{listing.title}</h3>
                 <p>{listing.brand}{listing.model ? ` ${listing.model}` : ''}{listing.year ? ` (${listing.year})` : ''}</p>
-                <strong>€ {Number(listing.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</strong>
+                <strong>{formatCurrency(listing.price)}</strong>
               </article>
               </Link>
             ))}
