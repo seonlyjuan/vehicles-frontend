@@ -58,7 +58,9 @@ export function UsernamePage({ user, updateUsername }) {
         </button>
       </form>
 
-      <Link to="/profile">Zurück zum Profil</Link>
+      <Link to="/profile">
+        <button className="general_button">Zurück zum Profil</button>
+      </Link>
     </div>
   );
 }

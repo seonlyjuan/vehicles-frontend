@@ -9,10 +9,7 @@ export function MainLayout({ onSignOut }) {
         Mit backgroundColor und border siehst du den Header sofort. 
         Später kannst du das einfach wieder löschen! 
       */}
-      <header 
-        className="dashboard-header" 
-        style={{ backgroundColor: '#6ac8ff', borderBottom: '3px solid blue' }}
-      >
+      <header className="dashboard-header">
         {/* 1. Profil (ganz links) */}
         <div>
           <button className="general_button" onClick={() => navigate('/profile')}>
