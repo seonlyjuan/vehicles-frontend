@@ -68,6 +68,11 @@
 .username-card > a { display: inline-block; margin-top: 20px; }
 
 .vehicle-listings-card, .vehicle-detail-card { text-align: left; }
+.vehicle-listings-header { align-items: center; display: flex; justify-content: space-between; gap: 16px; }
+.vehicle-listings-header h2 { margin: 0; }
+.filter-toggle { display: inline-flex; gap: 8px; }
+.filter-toggle-icon { display: inline-block; font-size: 1.1rem; line-height: 1; transition: transform .18s ease; }
+.filter-toggle[aria-expanded="true"] .filter-toggle-icon { transform: rotate(180deg); }
 .vehicle-filters { margin: 22px 0 28px; padding: 20px; border: 1px solid #dbe5f1; border-radius: 15px; background: linear-gradient(145deg,#f8fafc,#f1f5f9); }
 .vehicle-filter-fields { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); }
 .vehicle-filter-fields > label, .vehicle-filter-range label { display: grid; gap: 7px; color: #334155; font-size: .88rem; font-weight: 700; }
@@ -120,6 +125,8 @@
   .dashboard-header > div, .header-center, .header-right { justify-content: stretch; }
   .dashboard-header .general_button { width: 100%; padding-inline: 8px; }
   .form-page-header, .profile-listings-header { align-items: flex-start; flex-direction: column; }
+  .vehicle-listings-header { align-items: stretch; flex-direction: column; }
+  .vehicle-listings-header .filter-toggle { width: 100%; }
   .vehicle-filter-range { grid-template-columns: 1fr; }
   .vehicle-filter-actions, .profile-actions, .create-listing-actions { flex-direction: column; }
   .vehicle-filter-actions button, .profile-actions button, .profile-actions a, .create-listing-actions button, .create-listing-actions a { width: 100%; }

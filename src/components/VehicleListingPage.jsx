@@ -13,6 +13,7 @@ export function VehicleListingPage({ vehicleType, title }) {
   const [characteristics, setCharacteristics] = useState([]);
   const [filterValues, setFilterValues] = useState({});
   const [appliedFilters, setAppliedFilters] = useState({});
+  const [areFiltersVisible, setAreFiltersVisible] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -73,14 +74,30 @@ export function VehicleListingPage({ vehicleType, title }) {
 
   return (
     <div className="card vehicle-listings-card">
-      <h2>{title}</h2>
-      <VehicleFilters
-        characteristics={characteristics}
-        values={filterValues}
-        onChange={changeFilter}
-        onSubmit={applyFilters}
-        onReset={resetFilters}
-      />
+      <div className="vehicle-listings-header">
+        <h2>{title}</h2>
+        <button
+          className="general_button filter-toggle"
+          type="button"
+          aria-expanded={areFiltersVisible}
+          aria-controls={`${vehicleType}-filters`}
+          onClick={() => setAreFiltersVisible((visible) => !visible)}
+        >
+          Filter
+          <span className="filter-toggle-icon" aria-hidden="true">⌄</span>
+        </button>
+      </div>
+      {areFiltersVisible && (
+        <div id={`${vehicleType}-filters`}>
+          <VehicleFilters
+            characteristics={characteristics}
+            values={filterValues}
+            onChange={changeFilter}
+            onSubmit={applyFilters}
+            onReset={resetFilters}
+          />
+        </div>
+      )}
       {error && <p className="error" role="alert">{error}</p>}
       {isLoading ? (
         <div className="vehicle-listings-loading" role="status" aria-label="Inserate werden geladen" aria-live="polite">
