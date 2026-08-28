@@ -30,9 +30,9 @@ export function CreateCarListing() {
   }
 
   return (
-    <div className="card" style={{ margin: '0 auto', textAlign: 'left', maxWidth: '600px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h2 style={{ margin: 0 }}>Neues Auto-Inserat</h2>
+    <div className="card create-listing-card">
+      <div className="form-page-header">
+        <h2>Neues Auto-Inserat</h2>
         <Link to="/vehicles/cars/listing"><button className="general_button">Abbrechen</button></Link>
       </div>
       {errorMessage && <p className="error" role="alert">{errorMessage}</p>}

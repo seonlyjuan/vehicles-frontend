@@ -2,17 +2,17 @@ import { Link } from 'react-router-dom';
 
 export function ProfilePage({ user }) {
   return (
-    <div className="card" style={{ margin: '0 auto', textAlign: 'left' }}>
-      <h2 style={{ margin: '0 0 16px' }}>Dein Profil</h2>
+    <div className="card profile-card">
+      <h2>Dein Profil</h2>
 
-      <div style={{ margin: '20px 0' }}>
-        <p style={{ margin: '0 0 8px 0' }}><strong>Name:</strong> {user?.name}</p>
-        <p style={{ margin: '0 0 8px 0' }}>
+      <div className="profile-details">
+        <p>
           <strong>Username:</strong> {user?.username ? `@${user.username}` : 'Noch nicht festgelegt'}
         </p>
-        <p style={{ margin: 0 }}><strong>E-Mail:</strong> {user?.email}</p>
+        <p><strong>E-Mail:</strong> {user?.email}</p>
       </div>
 
+      <div className="profile-actions">
       <Link to="/profile/username" className="username-edit-link">
         <button className="general_button">
           {user?.username ? 'Username ändern' : 'Username festlegen'}
@@ -23,6 +23,7 @@ export function ProfilePage({ user }) {
         <Link to="/profile/listings">
           <button className="general_button">Meine Inserate</button>
         </Link>
+      </div>
       </div>
 
       <section className="create-listing-section" aria-labelledby="create-listing-heading">
