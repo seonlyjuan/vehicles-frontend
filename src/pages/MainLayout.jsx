@@ -20,8 +20,12 @@ export function MainLayout({ onSignOut }) {
           </button>
         </div>
 
-        {/* Platzhalter in der Mitte */}
-        <div></div>
+        {/* Home (zentriert) */}
+        <div className="header-center">
+          <button className="general_button" onClick={() => navigate('/')}>
+            Home
+          </button>
+        </div>
 
         {/* 2. Abmelden-Button (ganz rechts) */}
         <div className="header-right">

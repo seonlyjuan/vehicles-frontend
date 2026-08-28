@@ -25,8 +25,16 @@ export async function createVehicleListing({ vehicleType, payload, files }) {
   return listing;
 }
 
-export function getVehicleListings(vehicleType, page) {
-  return apiRequest(`/vehicles/${vehicleType}?page=${page}&per_page=30`);
+export function getVehicleListings(vehicleType, page, filters = {}) {
+  const query = new URLSearchParams({ page: String(page), per_page: '30' });
+  Object.entries(filters).forEach(([name, value]) => {
+    if (value !== '' && value !== null && value !== undefined) query.set(name, value);
+  });
+  return apiRequest(`/vehicles/${vehicleType}?${query.toString()}`);
+}
+
+export function getVehicleFilterMetadata(vehicleType) {
+  return apiRequest(`/vehicles/${vehicleType}/filters`);
 }
 
 export function getVehicleListing(vehicleType, vehicleId) {

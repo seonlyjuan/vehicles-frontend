@@ -1,19 +1,35 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { getVehicleListings } from '../api/vehicles';
+import { getVehicleFilterMetadata, getVehicleListings } from '../api/vehicles';
 import { VEHICLE_TYPES } from '../config/vehicleTypes';
+import { VehicleFilters } from './VehicleFilters';
 
 export function VehicleListingPage({ vehicleType, title }) {
   const [page, setPage] = useState(1);
   const [result, setResult] = useState({ items: [], total: 0, total_pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [characteristics, setCharacteristics] = useState([]);
+  const [filterValues, setFilterValues] = useState({});
+  const [appliedFilters, setAppliedFilters] = useState({});
+
+  useEffect(() => {
+    let active = true;
+    getVehicleFilterMetadata(vehicleType)
+      .then((data) => {
+        if (active) setCharacteristics(data.characteristics ?? []);
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message);
+      });
+    return () => { active = false; };
+  }, [vehicleType]);
 
   useEffect(() => {
     let active = true;
 
-    getVehicleListings(vehicleType, page)
+    getVehicleListings(vehicleType, page, appliedFilters)
       .then((data) => {
         if (active) setResult(data);
       })
@@ -27,7 +43,27 @@ export function VehicleListingPage({ vehicleType, title }) {
     return () => {
       active = false;
     };
-  }, [vehicleType, page]);
+  }, [vehicleType, page, appliedFilters]);
+
+  function changeFilter(event) {
+    setFilterValues((current) => ({ ...current, [event.target.name]: event.target.value }));
+  }
+
+  function applyFilters(event) {
+    event.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setPage(1);
+    setAppliedFilters({ ...filterValues });
+  }
+
+  function resetFilters() {
+    setIsLoading(true);
+    setError('');
+    setFilterValues({});
+    setPage(1);
+    setAppliedFilters({});
+  }
 
   function changePage(nextPage) {
     setIsLoading(true);
@@ -38,6 +74,13 @@ export function VehicleListingPage({ vehicleType, title }) {
   return (
     <div className="card vehicle-listings-card">
       <h2>{title}</h2>
+      <VehicleFilters
+        characteristics={characteristics}
+        values={filterValues}
+        onChange={changeFilter}
+        onSubmit={applyFilters}
+        onReset={resetFilters}
+      />
       {error && <p className="error" role="alert">{error}</p>}
       {isLoading ? (
         <div className="vehicle-listings-loading" role="status" aria-label="Inserate werden geladen" aria-live="polite">
@@ -46,7 +89,7 @@ export function VehicleListingPage({ vehicleType, title }) {
           </span>
         </div>
       ) : result.items.length === 0 ? (
-        <p className="intro">Noch keine Inserate vorhanden.</p>
+        <p className="intro">Keine passenden Inserate gefunden.</p>
       ) : (
         <>
           <p className="intro">{result.total} Inserat{result.total === 1 ? '' : 'e'} gefunden</p>
@@ -61,6 +104,7 @@ export function VehicleListingPage({ vehicleType, title }) {
                 )}
                 <h3>{listing.title}</h3>
                 <p>{listing.brand}{listing.model ? ` ${listing.model}` : ''}{listing.year ? ` (${listing.year})` : ''}</p>
+                {listing.power != null && <p>{listing.power} PS</p>}
                 <strong>€ {Number(listing.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</strong>
               </article>
               </Link>
