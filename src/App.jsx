@@ -8,6 +8,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { ProfileListingsPage } from './pages/ProfileListingsPage';
 import { UsernamePage } from './pages/UsernamePage';
 import { VehicleListingDetailPage } from './pages/VehicleListingDetailPage';
+import { VehiclePaymentPage } from './pages/VehiclePaymentPage';
 
 import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
 import { CreateBicycleListing } from './pages/vehicles/bicycles/listing/CreateListingPage';
@@ -58,6 +59,8 @@ function App() {
 
             <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
             <Route path="/vehicles/motorbikes/listing/create" element={<CreateMotorbikeListing user={auth.user} />} />
+
+            <Route path="/vehicles/:vehicleType/listing/:vehicleId/payment" element={<VehiclePaymentPage />} />
 
             <Route path="/vehicles/bicycles/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="bicycles" user={auth.user} />} />
             <Route path="/vehicles/cars/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="cars" user={auth.user} />} />

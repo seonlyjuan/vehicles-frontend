@@ -37,6 +37,14 @@ export function getVehicleFilterMetadata(vehicleType) {
   return apiRequest(`/vehicles/${vehicleType}/filters`);
 }
 
+export function getVehiclePaymentStatus(vehicleType, vehicleId) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}/payment-status`);
+}
+
+export function publishVehicleListing(vehicleType, vehicleId) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}/publish`, { method: 'POST' });
+}
+
 export function getVehicleListing(vehicleType, vehicleId) {
   return apiRequest(`/vehicles/${vehicleType}/${vehicleId}`);
 }

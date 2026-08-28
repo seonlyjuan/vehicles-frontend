@@ -54,7 +54,9 @@ export function ProfileListingsPage() {
             {listings.map((listing) => (
               <Link
                 className="vehicle-listing-link"
-                to={`/vehicles/${listing.vehicle_type}/listing/${listing.id}`}
+                to={listing.status === 'draft'
+                  ? `/vehicles/${listing.vehicle_type}/listing/${listing.id}/payment`
+                  : `/vehicles/${listing.vehicle_type}/listing/${listing.id}`}
                 key={`${listing.vehicle_type}-${listing.id}`}
               >
               <article className="vehicle-listing">
@@ -64,6 +66,7 @@ export function ProfileListingsPage() {
                   <div className="vehicle-listing-image vehicle-listing-image-placeholder">Kein Bild</div>
                 )}
                 <span className="vehicle-type-label">{VEHICLE_TYPE_LABELS[listing.vehicle_type]}</span>
+                {listing.status === 'draft' && <span className="vehicle-draft-label">Entwurf – Zahlung fortsetzen</span>}
                 <h3>{listing.title}</h3>
                 <p>{listing.brand}{listing.model ? ` ${listing.model}` : ''}{listing.year ? ` (${listing.year})` : ''}</p>
                 <strong>€ {Number(listing.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</strong>
