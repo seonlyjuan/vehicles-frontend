@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { getVehiclePaymentStatus, publishVehicleListing } from '../api/vehicles';
-import { VEHICLE_TYPES } from '../config/vehicleTypes';
+import { getVehiclePaymentStatus, publishVehicleListing } from '../../api/vehicles';
+import { VEHICLE_TYPES } from '../../config/vehicleTypes';
 
 const VALID_VEHICLE_TYPES = new Set(Object.keys(VEHICLE_TYPES));
 

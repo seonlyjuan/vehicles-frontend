@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,30}$/;
+const USERNAME_PATTERN = /^[A-Za-z0-9_]{3,30}$/;
 
 export function UsernamePage({ user, updateUsername }) {
   const [username, setUsername] = useState(user.username ?? '');

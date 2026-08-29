@@ -13,17 +13,17 @@ export function ProfilePage({ user }) {
       </div>
 
       <div className="profile-actions">
-      <Link to="/profile/username" className="username-edit-link">
-        <button className="general_button">
-          {user?.username ? 'Username ändern' : 'Username festlegen'}
-        </button>
-      </Link>
-
-      <div>
-        <Link to="/profile/listings">
-          <button className="general_button">Meine Inserate</button>
+        <Link to="/profile/username" className="username-edit-link">
+          <button className="general_button">
+            {user?.username ? 'Username ändern' : 'Username festlegen'}
+          </button>
         </Link>
-      </div>
+
+        <div>
+          <Link to="/profile/listings">
+            <button className="general_button">Meine Inserate</button>
+          </Link>
+        </div>
       </div>
 
       <section className="create-listing-section" aria-labelledby="create-listing-heading">

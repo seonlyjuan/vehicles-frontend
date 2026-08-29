@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export function DashboardPage() {
   return (
-    <section className="card vehicle-menu-card">
+    <section className="card vehicle-menu-card" aria-label="Fahrzeugkategorie wählen">
       <div className="center-vehicle-buttons">
         <Link to="/vehicles/bicycles/listing">
           <button className="large-vehicle-btn">

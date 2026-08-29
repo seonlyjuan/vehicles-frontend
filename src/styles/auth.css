@@ -18,7 +18,8 @@
 .dashboard-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
 .dashboard-wrapper .page { flex: 1; }
 .dashboard-header { align-items: center; display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; width: 100%; padding: 14px clamp(18px,4vw,48px); position: sticky; top: 0; z-index: 20; background: rgba(15,23,42,.92); border-bottom: 1px solid rgba(255,255,255,.1); box-shadow: 0 10px 30px rgba(15,23,42,.16); backdrop-filter: blur(16px); }
-.header-center, .header-right { display: flex; }
+.header-left, .header-center, .header-right { display: flex; }
+.header-left { gap: 8px; }
 .header-center { justify-content: center; }
 .header-right { justify-content: flex-end; }
 .dashboard-header .general_button { color: #eaf1ff; background: transparent; border-color: rgba(255,255,255,.22); box-shadow: none; }
@@ -100,6 +101,7 @@
 .vehicle-detail-card { max-width: 1000px; }
 .vehicle-detail-card article { margin-top: 26px; }
 .vehicle-detail-card article > h2 { margin: 8px 0 24px; font-size: clamp(1.8rem,4vw,2.6rem); }
+.contact-seller-button { margin-bottom: 22px; color: #fff; background: var(--primary); border-color: var(--primary); }
 .vehicle-detail-card article > p { display: grid; grid-template-columns: 120px 1fr; gap: 16px; margin: 0; padding: 13px 2px; border-bottom: 1px solid #edf1f6; }
 .vehicle-detail-images { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); margin: 22px 0 28px; }
 .vehicle-detail-image { min-width: 0; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
@@ -124,6 +126,34 @@
 .payment-actions a { text-decoration: none; }
 .payment-publish-button { color: #fff; background: var(--primary); border-color: var(--primary); }
 
+.messages-card, .conversation-card { max-width: 820px; text-align: left; }
+.messages-empty { padding: 28px; color: var(--muted); background: var(--surface-soft); border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; }
+.unread-summary { display: inline-flex; margin: 0 0 18px; padding: 8px 12px; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 999px; font-weight: 800; }
+.conversation-list { display: grid; gap: 10px; }
+.conversation-list-item { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 14px; padding: 15px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 13px; text-decoration: none; transition: border-color .16s ease, transform .16s ease; }
+.conversation-list-item:hover { transform: translateY(-2px); border-color: #9bb8ef; }
+.conversation-unread { border-color: #93c5fd; background: #f8fbff; box-shadow: inset 4px 0 0 var(--primary); }
+.unread-badge { padding: 5px 9px; color: #fff; background: var(--primary); border-radius: 999px; font-size: .75rem; font-weight: 800; }
+.conversation-list-item strong, .conversation-list-item small { display: block; }
+.conversation-list-item small, .conversation-list-item time { margin-top: 4px; color: var(--muted); font-size: .82rem; }
+.conversation-emoji { font-size: 2rem; }
+.conversation-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.conversation-header h2, .conversation-header p { margin: 0; }
+.conversation-header p { margin-top: 5px; color: var(--muted); }
+.conversation-header a { text-decoration: none; }
+.message-thread { display: flex; flex-direction: column; gap: 10px; min-height: 260px; max-height: 520px; margin: 20px 0; padding: 8px; overflow-y: auto; }
+.message-bubble { align-self: flex-start; max-width: min(78%, 560px); padding: 11px 14px; color: var(--ink); background: #eef2f7; border-radius: 4px 14px 14px; overflow-wrap: anywhere; }
+.message-bubble p { margin: 0; line-height: 1.5; white-space: pre-wrap; }
+.message-bubble time { display: block; margin-top: 6px; color: var(--muted); font-size: .72rem; }
+.message-own { align-self: flex-end; color: #fff; background: var(--primary); border-radius: 14px 4px 14px 14px; }
+.message-own time { color: #dbeafe; }
+.message-form { display: grid; gap: 8px; padding-top: 18px; border-top: 1px solid var(--line); }
+.message-form label { font-weight: 700; }
+.message-form textarea { width: 100%; padding: 11px 12px; border: 1px solid #cbd6e4; border-radius: 10px; resize: vertical; }
+.message-form-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.message-form-footer small { color: var(--muted); }
+.message-form-footer button { color: #fff; background: var(--primary); border-color: var(--primary); }
+
 @media (max-width: 800px) {
   .center-vehicle-buttons { grid-template-columns: 1fr; }
   .large-vehicle-btn { min-height: 240px; }
@@ -133,7 +163,9 @@
   .page { padding: 24px 14px 42px; }
   .card { padding: 22px 17px; border-radius: 14px; }
   .auth-card { padding: 36px 24px; }
-  .dashboard-header { position: static; grid-template-columns: repeat(3,minmax(0,1fr)); padding: 12px; gap: 8px; }
+  .dashboard-header { position: static; grid-template-columns: repeat(2,minmax(0,1fr)); padding: 12px; gap: 8px; }
+  .header-left { grid-column: 1/-1; }
+  .header-left .general_button { flex: 1; }
   .dashboard-header > div, .header-center, .header-right { justify-content: stretch; }
   .dashboard-header .general_button { width: 100%; padding-inline: 8px; }
   .form-page-header, .profile-listings-header { align-items: flex-start; flex-direction: column; }
@@ -147,4 +179,7 @@
   .vehicle-detail-images { grid-template-columns: 1fr; }
   .vehicle-detail-images img { height: 280px; }
   .vehicle-detail-card article > p { grid-template-columns: 95px 1fr; }
+  .conversation-list-item { grid-template-columns: auto 1fr auto; }
+  .conversation-list-item time { grid-column: 2; }
+  .message-bubble { max-width: 90%; }
 }

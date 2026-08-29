@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import { createVehicleListing } from '../api/vehicles';
-import { VEHICLE_TYPES } from '../config/vehicleTypes';
+import { createVehicleListing } from '../../api/vehicles';
+import { VEHICLE_TYPES } from '../../config/vehicleTypes';
 
 const INITIAL_FORM_DATA = { title: '', brand: '', model: '', year: '', power: '', price: '', description: '' };
 

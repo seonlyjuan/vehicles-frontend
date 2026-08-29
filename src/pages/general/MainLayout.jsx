@@ -1,4 +1,4 @@
-import { useNavigate, Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export function MainLayout({ onSignOut }) {
   const navigate = useNavigate();
@@ -11,9 +11,12 @@ export function MainLayout({ onSignOut }) {
       */}
       <header className="dashboard-header">
         {/* 1. Profil (ganz links) */}
-        <div>
+        <div className="header-left">
           <button className="general_button" onClick={() => navigate('/profile')}>
             Profil
+          </button>
+          <button className="general_button" onClick={() => navigate('/messages')}>
+            Nachrichten
           </button>
         </div>
 
