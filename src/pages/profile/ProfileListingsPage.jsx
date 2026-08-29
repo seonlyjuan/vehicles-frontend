@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { getProfileListings } from '../api/vehicles';
-import { formatCurrency } from '../utils/formatCurrency';
+import { getProfileListings } from '../../api/vehicles';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const VEHICLE_TYPE_LABELS = {
   bicycles: 'Fahrrad',

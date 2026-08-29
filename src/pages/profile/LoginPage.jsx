@@ -1,4 +1,4 @@
-import { GoogleSignInButton } from '../components/auth/GoogleSignInButton';
+import { GoogleSignInButton } from '../../components/auth/GoogleSignInButton';
 
 export function LoginPage({ auth }) {
   const params = new URLSearchParams(window.location.search);

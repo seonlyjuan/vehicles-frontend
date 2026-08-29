@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { getVehicleListing, updateVehicleImageOrder } from '../api/vehicles';
-import { formatCurrency } from '../utils/formatCurrency';
+import { startConversation } from '../../api/messages';
+import { getVehicleListing, updateVehicleImageOrder } from '../../api/vehicles';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const VEHICLE_TYPE_LABELS = {
   bicycles: 'Fahrrad',
@@ -12,10 +13,12 @@ const VEHICLE_TYPE_LABELS = {
 
 export function VehicleListingDetailPage({ vehicleType, user }) {
   const { vehicleId } = useParams();
+  const navigate = useNavigate();
   const [listing, setListing] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [isReordering, setIsReordering] = useState(false);
+  const [isStartingConversation, setIsStartingConversation] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -57,6 +60,18 @@ export function VehicleListingDetailPage({ vehicleType, user }) {
     }
   }
 
+  async function contactSeller() {
+    setIsStartingConversation(true);
+    setError('');
+    try {
+      const conversation = await startConversation(vehicleType, vehicleId);
+      navigate(`/messages/${conversation.id}`);
+    } catch (requestError) {
+      setError(requestError.message);
+      setIsStartingConversation(false);
+    }
+  }
+
   if (isLoading) return <div className="card"><p>Inserat wird geladen …</p></div>;
 
   return (
@@ -71,6 +86,11 @@ export function VehicleListingDetailPage({ vehicleType, user }) {
         <article>
           <span className="vehicle-type-label">{VEHICLE_TYPE_LABELS[vehicleType]}</span>
           <h2>{listing.title}</h2>
+          {listing.profile_id !== user?.id && (
+            <button className="general_button contact-seller-button" type="button" onClick={contactSeller} disabled={isStartingConversation}>
+              {isStartingConversation ? 'Unterhaltung wird geöffnet …' : 'Verkäufer kontaktieren'}
+            </button>
+          )}
 
           {listing.images?.length > 0 ? (
             <div className="vehicle-detail-images">
