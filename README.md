@@ -23,3 +23,5 @@ selben WLAN sein.
 Für den Google-Login muss diese Adresse zusätzlich in Supabase unter
 `Authentication > URL Configuration > Redirect URLs` eingetragen werden,
 beispielsweise als `http://192.168.1.50:5173/**`.
+
+--------------------------------------------------------------------------------

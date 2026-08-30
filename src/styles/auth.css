@@ -7,10 +7,9 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .login-page { min-height: 100vh; place-items: center; }
-.auth-card { max-width: 480px; padding: 48px; }
+.auth-card { max-width: 600px; padding: 60px; }
 .auth-card h1 { margin: 0; font-size: 2.4rem; }
-.logo { margin: 0 auto 20px; width: 58px; height: 58px; border-radius: 18px; background: linear-gradient(135deg,#2563eb,#06b6d4); box-shadow: 0 12px 28px rgba(37,99,235,.3); }
-.eyebrow { margin: 0; }
+.logo { margin: 0 auto 20px; width: 58px; height: 58px; border-radius: 18px; background: linear-gradient(135deg,#3ceb25,#06b6d4); box-shadow: 0 12px 28px rgba(37,99,235,.3); }
 .intro { color: var(--muted); margin: 10px 0 24px; }
 .privacy { color: var(--muted); font-size: .82rem; line-height: 1.55; margin: 24px 0 0; }
 .status { color: var(--muted); }

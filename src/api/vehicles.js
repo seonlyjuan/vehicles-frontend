@@ -48,3 +48,18 @@ export function updateVehicleImageOrder(vehicleType, vehicleId, imageIds) {
 export function getProfileListings() {
   return apiRequest('/profile/listings');
 }
+
+export function updateVehicleListing(vehicleType, vehicleId, payload) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}`, { method: 'PATCH', body: payload });
+}
+
+export function changeVehicleListingStatus(vehicleType, vehicleId, action) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}/status`, {
+    method: 'PATCH',
+    body: { action },
+  });
+}
+
+export function deleteVehicleListing(vehicleType, vehicleId) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}`, { method: 'DELETE' });
+}

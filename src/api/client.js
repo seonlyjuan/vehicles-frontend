@@ -15,7 +15,12 @@ export async function apiRequest(path, { method = 'GET', body } = {}) {
     body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
 
-  const data = await response.json();
+  const contentType = response.headers.get('content-type') ?? '';
+  const data = response.status === 204
+    ? null
+    : contentType.includes('application/json')
+      ? await response.json()
+      : { detail: await response.text() };
   if (!response.ok) throw new Error(data.detail ?? 'Die Anfrage ist fehlgeschlagen.');
   return data;
 }

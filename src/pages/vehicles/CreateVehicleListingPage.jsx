@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import { createVehicleListing } from '../../api/vehicles';
+import { VehicleFormFields } from '../../components/vehicles/VehicleFormFields';
 import { VEHICLE_TYPES } from '../../config/vehicleTypes';
-
-const INITIAL_FORM_DATA = { title: '', brand: '', model: '', year: '', power: '', price: '', description: '' };
+import { EMPTY_VEHICLE_FORM, toVehiclePayload } from '../../utils/vehicleForm';
 
 export function CreateVehicleListingPage() {
   const { vehicleType } = useParams();
   const navigate = useNavigate();
   const configuration = VEHICLE_TYPES[vehicleType];
-  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+  const [formData, setFormData] = useState(EMPTY_VEHICLE_FORM);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,15 +25,7 @@ export function CreateVehicleListingPage() {
     event.preventDefault();
     setLoading(true);
     setErrorMessage('');
-    const payload = {
-      title: formData.title,
-      brand: formData.brand,
-      model: configuration.fields.model ? formData.model || null : null,
-      year: configuration.fields.year && formData.year ? Number(formData.year) : null,
-      power: configuration.fields.power && formData.power ? Number(formData.power) : null,
-      price: Number(formData.price),
-      description: formData.description,
-    };
+    const payload = toVehiclePayload(formData, configuration);
 
     try {
       const listing = await createVehicleListing({ vehicleType, payload, files });
@@ -53,14 +45,13 @@ export function CreateVehicleListingPage() {
       </div>
       {errorMessage && <p className="error" role="alert">{errorMessage}</p>}
       <form onSubmit={handleSubmit} className="listing-form">
-        <label>Titel<input name="title" value={formData.title} onChange={changeField} required /></label>
-        <label>Marke<input name="brand" value={formData.brand} onChange={changeField} required /></label>
-        {configuration.fields.model && <label>Modell<input name="model" value={formData.model} onChange={changeField} required={configuration.fields.modelRequired} /></label>}
-        {configuration.fields.year && <label>Baujahr<input type="number" min="1886" max="2100" name="year" value={formData.year} onChange={changeField} /></label>}
-        {configuration.fields.power && <label>Leistung (PS)<input type="number" min="0" max="5000" name="power" value={formData.power} onChange={changeField} /></label>}
-        <label>Preis (CHF)<input type="number" min="0" step="0.01" name="price" value={formData.price} onChange={changeField} required /></label>
-        <label>Beschreibung<textarea name="description" rows="4" value={formData.description} onChange={changeField} /></label>
-        <label>Bilder (optional, maximal 6)<input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" multiple onChange={(event) => setFiles(Array.from(event.target.files ?? []))} /></label>
+        <VehicleFormFields
+          configuration={configuration}
+          values={formData}
+          onChange={changeField}
+          onLocationChange={(location) => setFormData((current) => ({ ...current, ...location }))}
+          onFilesChange={(event) => setFiles(Array.from(event.target.files ?? []))}
+        />
         <button type="submit" className="general_button" disabled={loading}>{loading ? 'Entwurf wird gespeichert …' : 'Weiter zur Bezahlung'}</button>
       </form>
     </div>
