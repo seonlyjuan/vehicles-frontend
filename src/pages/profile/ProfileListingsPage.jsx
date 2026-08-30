@@ -2,12 +2,18 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { getProfileListings } from '../../api/vehicles';
+import { ListingManagementActions } from '../../components/vehicles/ListingManagementActions';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const VEHICLE_TYPE_LABELS = {
   bicycles: 'Fahrrad',
   cars: 'Auto',
   motorbikes: 'Motorrad',
+};
+
+const STATUS_LABELS = {
+  draft: 'Entwurf', active: 'Aktiv', sold: 'Verkauft', archived: 'Archiviert',
+  expired: 'Abgelaufen', suspended: 'Gesperrt',
 };
 
 export function ProfileListingsPage() {
@@ -52,27 +58,34 @@ export function ProfileListingsPage() {
         <>
           <p className="intro">{listings.length} eigene{listings.length === 1 ? 's' : ''} Inserat{listings.length === 1 ? '' : 'e'}</p>
           <div className="vehicle-list-grid">
-            {listings.map((listing) => (
-              <Link
-                className="vehicle-listing-link"
-                to={listing.status === 'draft'
-                  ? `/vehicles/${listing.vehicle_type}/listing/${listing.id}/payment`
-                  : `/vehicles/${listing.vehicle_type}/listing/${listing.id}`}
-                key={`${listing.vehicle_type}-${listing.id}`}
-              >
-              <article className="vehicle-listing">
+            {listings.map((listing, index) => (
+              <article className="vehicle-listing" key={`${listing.vehicle_type}-${listing.id}`}>
+                <Link
+                  className="vehicle-listing-link"
+                  to={listing.status === 'draft'
+                    ? `/vehicles/${listing.vehicle_type}/listing/${listing.id}/payment`
+                    : `/vehicles/${listing.vehicle_type}/listing/${listing.id}`}
+                >
                 {listing.images?.[0]?.url ? (
                   <img src={listing.images[0].url} alt={listing.title} className="vehicle-listing-image" />
                 ) : (
                   <div className="vehicle-listing-image vehicle-listing-image-placeholder">Kein Bild</div>
                 )}
                 <span className="vehicle-type-label">{VEHICLE_TYPE_LABELS[listing.vehicle_type]}</span>
-                {listing.status === 'draft' && <span className="vehicle-draft-label">Entwurf – Zahlung fortsetzen</span>}
+                <span className="vehicle-draft-label">{STATUS_LABELS[listing.status] ?? listing.status}</span>
                 <h3>{listing.title}</h3>
                 <p>{listing.brand}{listing.model ? ` ${listing.model}` : ''}{listing.year ? ` (${listing.year})` : ''}</p>
                 <strong>{formatCurrency(listing.price)}</strong>
+                </Link>
+                <ListingManagementActions
+                  listing={listing}
+                  onChange={(updated) => setListings((current) => current.map((item, itemIndex) => (
+                    itemIndex === index ? { ...item, ...updated } : item
+                  )))}
+                  onDelete={() => setListings((current) => current.filter((_, itemIndex) => itemIndex !== index))}
+                  onError={setError}
+                />
               </article>
-              </Link>
             ))}
           </div>
         </>

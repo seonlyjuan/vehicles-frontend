@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 
-import { getVehicleFilterMetadata, getVehicleListings } from '../api/vehicles';
-import { VEHICLE_TYPES } from '../config/vehicleTypes';
-import { VehicleFilters } from './VehicleFilters';
-import { formatCurrency } from '../utils/formatCurrency';
+import { getVehicleFilterMetadata, getVehicleListings } from '../../api/vehicles';
+import { VehicleFilters } from '../../components/VehicleFilters';
+import { VEHICLE_TYPES } from '../../config/vehicleTypes';
+import { formatCurrency } from '../../utils/formatCurrency';
 
-export function VehicleListingPage({ vehicleType, title }) {
+export function VehicleListingsPage() {
+  const { vehicleType } = useParams();
+  const vehicleConfig = VEHICLE_TYPES[vehicleType];
+
+  if (!vehicleConfig) return <Navigate to="/" replace />;
+  return <VehicleListingContent vehicleType={vehicleType} title={vehicleConfig.listingTitle} />;
+}
+
+function VehicleListingContent({ vehicleType, title }) {
   const [page, setPage] = useState(1);
   const [result, setResult] = useState({ items: [], total: 0, total_pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
@@ -123,6 +131,10 @@ export function VehicleListingPage({ vehicleType, title }) {
                 <h3>{listing.title}</h3>
                 <p>{listing.brand}{listing.model ? ` ${listing.model}` : ''}{listing.year ? ` (${listing.year})` : ''}</p>
                 {listing.power != null && <p>{listing.power} PS</p>}
+                <p>{listing.postal_code} {listing.locality}, {listing.canton}</p>
+                <p>{listing.seller?.seller_type === 'dealer'
+                  ? `${listing.seller.company_name || 'Händler'}${listing.seller.is_verified_dealer ? ' · verifiziert' : ''}`
+                  : 'Privatverkauf'}</p>
                 <strong>{formatCurrency(listing.price)}</strong>
               </article>
               </Link>

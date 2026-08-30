@@ -2,23 +2,20 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { startConversation } from '../../api/messages';
-import { getVehicleListing, updateVehicleImageOrder } from '../../api/vehicles';
+import { changeVehicleListingStatus, deleteVehicleListing, getVehicleListing, updateVehicleImageOrder } from '../../api/vehicles';
+import { ReportContent } from '../../components/safety/ReportContent';
+import { VEHICLE_TYPES } from '../../config/vehicleTypes';
 import { formatCurrency } from '../../utils/formatCurrency';
 
-const VEHICLE_TYPE_LABELS = {
-  bicycles: 'Fahrrad',
-  cars: 'Auto',
-  motorbikes: 'Motorrad',
-};
-
-export function VehicleListingDetailPage({ vehicleType, user }) {
-  const { vehicleId } = useParams();
+export function VehicleListingDetailPage({ user }) {
+  const { vehicleType, vehicleId } = useParams();
   const navigate = useNavigate();
   const [listing, setListing] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [isReordering, setIsReordering] = useState(false);
   const [isStartingConversation, setIsStartingConversation] = useState(false);
+  const [isChangingStatus, setIsChangingStatus] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -72,6 +69,31 @@ export function VehicleListingDetailPage({ vehicleType, user }) {
     }
   }
 
+  async function changeStatus(action) {
+    setIsChangingStatus(true);
+    setError('');
+    try {
+      const updated = await changeVehicleListingStatus(vehicleType, vehicleId, action);
+      setListing((current) => ({ ...current, ...updated }));
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsChangingStatus(false);
+    }
+  }
+
+  async function removeListing() {
+    if (!window.confirm('Inserat wirklich löschen? Die Bilder werden sofort entfernt.')) return;
+    setIsChangingStatus(true);
+    try {
+      await deleteVehicleListing(vehicleType, vehicleId);
+      navigate('/profile/listings');
+    } catch (requestError) {
+      setError(requestError.message);
+      setIsChangingStatus(false);
+    }
+  }
+
   if (isLoading) return <div className="card"><p>Inserat wird geladen …</p></div>;
 
   return (
@@ -84,12 +106,27 @@ export function VehicleListingDetailPage({ vehicleType, user }) {
         <p className="error" role="alert">{error}</p>
       ) : listing && (
         <article>
-          <span className="vehicle-type-label">{VEHICLE_TYPE_LABELS[vehicleType]}</span>
+          <span className="vehicle-type-label">{VEHICLE_TYPES[vehicleType]?.detailLabel}</span>
           <h2>{listing.title}</h2>
+          {listing.profile_id === user?.id && (
+            <div className="listing-owner-actions">
+              <Link to={`/vehicles/${vehicleType}/listing/${vehicleId}/edit`}><button className="general_button">Bearbeiten</button></Link>
+              {listing.status === 'active' && <button className="general_button" disabled={isChangingStatus} onClick={() => changeStatus('archive')}>Archivieren</button>}
+              {listing.status === 'active' && <button className="general_button" disabled={isChangingStatus} onClick={() => changeStatus('mark_sold')}>Als verkauft markieren</button>}
+              {listing.status === 'archived' && <button className="general_button" disabled={isChangingStatus} onClick={() => changeStatus('reactivate')}>Reaktivieren</button>}
+              <button className="general_button danger-button" disabled={isChangingStatus} onClick={removeListing}>Löschen</button>
+            </div>
+          )}
           {listing.profile_id !== user?.id && (
-            <button className="general_button contact-seller-button" type="button" onClick={contactSeller} disabled={isStartingConversation}>
-              {isStartingConversation ? 'Unterhaltung wird geöffnet …' : 'Verkäufer kontaktieren'}
-            </button>
+            <div className="public-listing-actions">
+              <button className="general_button contact-seller-button" type="button" onClick={contactSeller} disabled={isStartingConversation}>
+                {isStartingConversation ? 'Unterhaltung wird geöffnet …' : 'Verkäufer kontaktieren'}
+              </button>
+              <ReportContent
+                label="Inserat melden"
+                subject={{ subject_type: 'listing', vehicle_type: vehicleType, listing_id: vehicleId }}
+              />
+            </div>
           )}
 
           {listing.images?.length > 0 ? (
@@ -132,6 +169,14 @@ export function VehicleListingDetailPage({ vehicleType, user }) {
           {listing.year && <p><strong>Jahr:</strong> {listing.year}</p>}
           {listing.power != null && <p><strong>Leistung:</strong> {listing.power} PS</p>}
           <p><strong>Preis:</strong> {formatCurrency(listing.price)}</p>
+          <p><strong>Standort:</strong> {listing.postal_code} {listing.locality}, {listing.canton}</p>
+          <p><strong>Verkäufer:</strong> {listing.seller?.seller_type === 'dealer'
+            ? `${listing.seller.company_name || 'Händler'}${listing.seller.is_verified_dealer ? ' (verifiziert)' : ''}`
+            : 'Privatverkäufer'}</p>
+          {listing.condition && <p><strong>Zustand:</strong> {listing.condition}</p>}
+          {listing.known_defects && <p><strong>Mängel:</strong> {listing.known_defects}</p>}
+          {listing.mileage != null && <p><strong>Kilometer:</strong> {Number(listing.mileage).toLocaleString('de-CH')} km</p>}
+          {listing.first_registration && <p><strong>Erstzulassung:</strong> {listing.first_registration}</p>}
 
           <section className="vehicle-description">
             <h3>Beschreibung</h3>

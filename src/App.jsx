@@ -3,23 +3,23 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useGoogleAuth } from './hooks/useGoogleAuth';
 import { DashboardPage } from './pages/general/DashboardPage';
 import { MainLayout } from './pages/general/MainLayout';
+import { NotificationsPage } from './pages/general/NotificationsPage';
 import { ConversationPage } from './pages/messages/ConversationPage';
 import { MessagesPage } from './pages/messages/MessagesPage';
+import { ModerationPage } from './pages/moderation/ModerationPage';
 import { LoginPage } from './pages/profile/LoginPage';
 import { ProfileListingsPage } from './pages/profile/ProfileListingsPage';
 import { ProfilePage } from './pages/profile/ProfilePage';
+import { ProfileSettingsPage } from './pages/profile/ProfileSettingsPage';
 import { UsernamePage } from './pages/profile/UsernamePage';
 import { CreateVehicleListingPage } from './pages/vehicles/CreateVehicleListingPage';
+import { EditVehicleListingPage } from './pages/vehicles/EditVehicleListingPage';
 import { VehicleListingDetailPage } from './pages/vehicles/VehicleListingDetailPage';
+import { VehicleListingsPage } from './pages/vehicles/VehicleListingsPage';
 import { VehiclePaymentPage } from './pages/vehicles/VehiclePaymentPage';
 
-import { BicycleListing } from './pages/vehicles/bicycles/listing/ListingPage';
-
-import { CarListing } from './pages/vehicles/cars/listing/ListingPage';
-
-import { MotorbikeListing } from './pages/vehicles/motorbikes/listing/ListingPage';
-
 import './styles/auth.css';
+import './styles/platform.css';
 
 function App() {
   const auth = useGoogleAuth();
@@ -49,22 +49,21 @@ function App() {
             
             <Route path="/profile" element={<ProfilePage user={auth.user} />} />
             <Route path="/profile/listings" element={<ProfileListingsPage />} />
+            <Route path="/profile/settings" element={<ProfileSettingsPage auth={auth} />} />
             <Route path="/messages" element={<MessagesPage user={auth.user} />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/messages/:conversationId" element={<ConversationPage user={auth.user} />} />
+            {['moderator', 'admin'].includes(auth.user.platform_role) && (
+              <Route path="/moderation" element={<ModerationPage />} />
+            )}
 
-            <Route path="/vehicles/bicycles/listing" element={<BicycleListing />} />
-            {/* Hier wird der user-Prop übergeben: */}
-
-            <Route path="/vehicles/cars/listing" element={<CarListing />} />
-
-            <Route path="/vehicles/motorbikes/listing" element={<MotorbikeListing />} />
+            <Route path="/vehicles/:vehicleType/listing" element={<VehicleListingsPage />} />
             <Route path="/vehicles/:vehicleType/listing/create" element={<CreateVehicleListingPage />} />
 
             <Route path="/vehicles/:vehicleType/listing/:vehicleId/payment" element={<VehiclePaymentPage />} />
+            <Route path="/vehicles/:vehicleType/listing/:vehicleId/edit" element={<EditVehicleListingPage />} />
 
-            <Route path="/vehicles/bicycles/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="bicycles" user={auth.user} />} />
-            <Route path="/vehicles/cars/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="cars" user={auth.user} />} />
-            <Route path="/vehicles/motorbikes/listing/:vehicleId" element={<VehicleListingDetailPage vehicleType="motorbikes" user={auth.user} />} />
+            <Route path="/vehicles/:vehicleType/listing/:vehicleId" element={<VehicleListingDetailPage user={auth.user} />} />
 
             {/* Fallback für unbekannte URLs */}
             <Route path="*" element={<Navigate to="/" replace />} />

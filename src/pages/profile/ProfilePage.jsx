@@ -10,6 +10,10 @@ export function ProfilePage({ user }) {
           <strong>Username:</strong> {user?.username ? `@${user.username}` : 'Noch nicht festgelegt'}
         </p>
         <p><strong>E-Mail:</strong> {user?.email}</p>
+        <p><strong>Verkäufer:</strong> {user?.seller_type === 'dealer' ? 'Händler' : 'Privat'}</p>
+        {user?.seller_type === 'dealer' && (
+          <p><strong>Prüfstatus:</strong> {user.dealer_verification_status ?? 'nicht beantragt'}</p>
+        )}
       </div>
 
       <div className="profile-actions">
@@ -22,6 +26,11 @@ export function ProfilePage({ user }) {
         <div>
           <Link to="/profile/listings">
             <button className="general_button">Meine Inserate</button>
+          </Link>
+        </div>
+        <div>
+          <Link to="/profile/settings">
+            <button className="general_button">Kontoeinstellungen</button>
           </Link>
         </div>
       </div>

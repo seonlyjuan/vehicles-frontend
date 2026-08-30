@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import { apiRequest } from '../api/client';
+import { updateSellerProfile as saveSellerProfile } from '../api/profile';
 
 function toAppUser(user) {
   if (!user) return null;
@@ -29,10 +30,10 @@ export function useGoogleAuth() {
 
     try {
       const profile = await apiRequest('/profile');
-      setUser({ ...appUser, username: profile.username ?? null });
+      setUser({ ...appUser, ...profile, username: profile.username ?? null });
     } catch (profileError) {
       setError(profileError.message);
-      setUser({ ...appUser, username: null });
+      setUser({ ...appUser, username: null, seller_type: 'private', platform_role: 'user' });
     }
   }, []);
 
@@ -111,7 +112,10 @@ export function useGoogleAuth() {
     if (!supabase) return;
     setError('');
     const { error: signOutError } = await supabase.auth.signOut();
-    if (signOutError) setError(signOutError.message);
+    if (signOutError) {
+      await supabase.auth.signOut({ scope: 'local' });
+      setError(signOutError.message);
+    }
   }, []);
 
   const updateUsername = useCallback(async (username) => {
@@ -123,8 +127,25 @@ export function useGoogleAuth() {
       body: { username: normalizedUsername },
     });
 
-    setUser((currentUser) => ({ ...currentUser, username: data }));
+    setUser((currentUser) => ({ ...currentUser, username: data.username }));
   }, [user]);
 
-  return { user, error, isLoading, isInitializing, signInWithGoogle, isGoogleConfigured: isSupabaseConfigured, signOut, updateUsername };
+  const updateSellerProfile = useCallback(async (payload) => {
+    if (!supabase || !user) throw new Error('Keine aktive Sitzung gefunden.');
+    const data = await saveSellerProfile(payload);
+    setUser((currentUser) => ({ ...currentUser, ...data }));
+    return data;
+  }, [user]);
+
+  return {
+    user,
+    error,
+    isLoading,
+    isInitializing,
+    signInWithGoogle,
+    isGoogleConfigured: isSupabaseConfigured,
+    signOut,
+    updateUsername,
+    updateSellerProfile,
+  };
 }
