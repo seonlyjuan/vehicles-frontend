@@ -23,7 +23,6 @@
 .header-right { justify-content: flex-end; }
 .dashboard-header .general_button { color: #eaf1ff; background: transparent; border-color: rgba(255,255,255,.22); box-shadow: none; }
 .dashboard-header .general_button:hover { color: #fff; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
-.header-center .general_button { color: #fff; background: var(--primary); border-color: var(--primary); }
 
 .general_button, .google-login { align-items: center; justify-content: center; min-height: 42px; padding: 9px 17px; border: 1px solid #cad5e4; border-radius: 10px; color: var(--ink); background: #fff; box-shadow: 0 3px 10px rgba(15,23,42,.06); cursor: pointer; font-weight: 700; transition: transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease; }
 .general_button:hover, .google-login:hover { transform: translateY(-1px); border-color: #93a4bb; box-shadow: 0 8px 20px rgba(15,23,42,.1); }
@@ -88,7 +87,7 @@
 .vehicle-listing-link { color: inherit; text-decoration: none; }
 .vehicle-listing { height: 100%; overflow: hidden; padding-bottom: 18px; border: 1px solid #dfe7f1; border-radius: 15px; background: #fff; box-shadow: 0 8px 24px rgba(33,48,78,.07); transition: transform .2s ease,box-shadow .2s ease,border-color .2s ease; }
 .vehicle-listing-link:hover .vehicle-listing, .vehicle-listing-link:focus-visible .vehicle-listing { transform: translateY(-5px); border-color: #a8bde2; box-shadow: 0 18px 36px rgba(37,99,235,.13); }
-.vehicle-listing-image { display: block; width: 100%; height: 185px; object-fit: cover; background: #eef2f7; }
+.vehicle-listing-image { display: block; width: 100%; height: 185px; object-fit: contain; object-position: center; background: #eef2f7; }
 .vehicle-listing-image-placeholder { align-items: center; display: flex; justify-content: center; color: var(--muted); }
 .vehicle-listing h3, .vehicle-listing p, .vehicle-listing strong { display: block; margin: 10px 16px 0; }
 .vehicle-listing h3 { font-size: 1.08rem; }
@@ -101,10 +100,11 @@
 .vehicle-detail-card article { margin-top: 26px; }
 .vehicle-detail-card article > h2 { margin: 8px 0 24px; font-size: clamp(1.8rem,4vw,2.6rem); }
 .contact-seller-button { margin-bottom: 22px; color: #fff; background: var(--primary); border-color: var(--primary); }
-.vehicle-detail-card article > p { display: grid; grid-template-columns: 120px 1fr; gap: 16px; margin: 0; padding: 13px 2px; border-bottom: 1px solid #edf1f6; }
+.vehicle-detail-card article > p { display: grid; grid-template-columns: 145px 1fr; gap: 16px; margin: 0; padding: 13px 2px; border-bottom: 1px solid #edf1f6; }
+.vehicle-detail-card article > p > strong { white-space: nowrap; }
 .vehicle-detail-images { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); margin: 22px 0 28px; }
 .vehicle-detail-image { min-width: 0; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
-.vehicle-detail-images img { display: block; width: 100%; height: 360px; object-fit: cover; border-radius: 9px; }
+.vehicle-detail-images img { display: block; width: 100%; height: clamp(360px,65vh,640px); object-fit: contain; object-position: center; border-radius: 9px; background: #eef2f7; }
 .image-order-actions { align-items: center; display: grid; grid-template-columns: auto 1fr auto; gap: 8px; margin-top: 8px; text-align: center; }
 .image-order-actions span { font-size: .82rem; font-weight: 700; }
 .image-order-actions button { width: 34px; height: 34px; min-height: 0; padding: 0; }
@@ -176,8 +176,8 @@
   .payment-actions a, .payment-actions button { width: 100%; }
   .vehicle-filter-actions button, .profile-actions button, .profile-actions a, .create-listing-actions button, .create-listing-actions a { width: 100%; }
   .vehicle-detail-images { grid-template-columns: 1fr; }
-  .vehicle-detail-images img { height: 280px; }
-  .vehicle-detail-card article > p { grid-template-columns: 95px 1fr; }
+  .vehicle-detail-images img { height: clamp(360px,65vh,520px); }
+  .vehicle-detail-card article > p { grid-template-columns: 130px 1fr; gap: 10px; }
   .conversation-list-item { grid-template-columns: auto 1fr auto; }
   .conversation-list-item time { grid-column: 2; }
   .message-bubble { max-width: 90%; }
