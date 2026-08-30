@@ -4,8 +4,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { startConversation } from '../../api/messages';
 import { changeVehicleListingStatus, deleteVehicleListing, getVehicleListing, updateVehicleImageOrder } from '../../api/vehicles';
 import { ReportContent } from '../../components/safety/ReportContent';
+import { getVehicleConditionLabel } from '../../config/vehicleConditions';
 import { VEHICLE_TYPES } from '../../config/vehicleTypes';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { formatDate } from '../../utils/formatDate';
 
 export function VehicleListingDetailPage({ user }) {
   const { vehicleType, vehicleId } = useParams();
@@ -173,10 +175,10 @@ export function VehicleListingDetailPage({ user }) {
           <p><strong>Verkäufer:</strong> {listing.seller?.seller_type === 'dealer'
             ? `${listing.seller.company_name || 'Händler'}${listing.seller.is_verified_dealer ? ' (verifiziert)' : ''}`
             : 'Privatverkäufer'}</p>
-          {listing.condition && <p><strong>Zustand:</strong> {listing.condition}</p>}
+          {listing.condition && <p><strong>Zustand:</strong> {getVehicleConditionLabel(listing.condition)}</p>}
           {listing.known_defects && <p><strong>Mängel:</strong> {listing.known_defects}</p>}
           {listing.mileage != null && <p><strong>Kilometer:</strong> {Number(listing.mileage).toLocaleString('de-CH')} km</p>}
-          {listing.first_registration && <p><strong>Erstzulassung:</strong> {listing.first_registration}</p>}
+          {listing.first_registration && <p><strong>Erstzulassung:</strong> {formatDate(listing.first_registration)}</p>}
 
           <section className="vehicle-description">
             <h3>Beschreibung</h3>

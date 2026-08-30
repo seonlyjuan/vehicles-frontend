@@ -1,4 +1,5 @@
 import { SwissLocationFields } from '../SwissLocationFields';
+import { VEHICLE_CONDITIONS } from '../../config/vehicleConditions';
 
 export function VehicleFormFields({ configuration, values, onChange, onLocationChange, onFilesChange }) {
   return (
@@ -23,9 +24,9 @@ export function VehicleFormFields({ configuration, values, onChange, onLocationC
       <label>
         Zustand
         <select name="condition" value={values.condition} onChange={onChange} required>
-          <option value="new">Neu</option>
-          <option value="used">Gebraucht</option>
-          <option value="damaged">Beschädigt / reparaturbedürftig</option>
+          {VEHICLE_CONDITIONS.map((condition) => (
+            <option key={condition.value} value={condition.value}>{condition.label}</option>
+          ))}
         </select>
       </label>
       <label>
