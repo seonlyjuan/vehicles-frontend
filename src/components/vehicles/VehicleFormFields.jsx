@@ -39,7 +39,7 @@ export function VehicleFormFields({ configuration, values, onChange, onLocationC
       {onFilesChange && (
         <label>
           Bilder (optional, maximal 6)
-          <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" multiple onChange={onFilesChange} />
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.jpg,.jpeg,.mpo,.avif,.heic,.heif" multiple onChange={onFilesChange} />
         </label>
       )}
     </>

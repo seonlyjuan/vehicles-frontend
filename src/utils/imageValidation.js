@@ -1,8 +1,8 @@
 const MAX_IMAGE_COUNT = 6;
 const MAX_IMAGE_SIZE_BYTES = 12 * 1024 * 1024;
 const MAX_TOTAL_IMAGE_SIZE_BYTES = MAX_IMAGE_COUNT * MAX_IMAGE_SIZE_BYTES;
-const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']);
-const ALLOWED_IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif']);
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/heic', 'image/heif']);
+const ALLOWED_IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'mpo', 'png', 'webp', 'avif', 'heic', 'heif']);
 
 function hasAllowedType(file) {
   const extension = file.name.split('.').pop()?.toLowerCase();
@@ -14,7 +14,7 @@ export function validateVehicleImages(files) {
 
   let totalSize = 0;
   for (const file of files) {
-    if (!hasAllowedType(file)) throw new Error('Es sind nur JPEG-, PNG-, WebP-, HEIC- und HEIF-Bilder erlaubt.');
+    if (!hasAllowedType(file)) throw new Error('Es sind nur JPEG-, Smartphone-JPEG-, PNG-, WebP-, AVIF-, HEIC- und HEIF-Bilder erlaubt.');
     if (file.size > MAX_IMAGE_SIZE_BYTES) throw new Error('Jedes Bild darf höchstens 12 MB groß sein.');
     totalSize += file.size;
   }

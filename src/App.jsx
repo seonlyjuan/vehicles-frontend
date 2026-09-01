@@ -1,4 +1,5 @@
 // client/src/App.jsx
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useGoogleAuth } from './hooks/useGoogleAuth';
 import { DashboardPage } from './pages/general/DashboardPage';
@@ -19,12 +20,30 @@ import { VehicleListingsPage } from './pages/vehicles/VehicleListingsPage';
 import { VehiclePaymentPage } from './pages/vehicles/VehiclePaymentPage';
 
 import './styles/auth.css';
+import './styles/legal.css';
 import './styles/platform.css';
+
+const ImprintPage = lazy(() => import('./pages/legal/ImprintPage')
+  .then((module) => ({ default: module.ImprintPage })));
+const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage')
+  .then((module) => ({ default: module.PrivacyPolicyPage })));
+const TermsPage = lazy(() => import('./pages/legal/TermsPage')
+  .then((module) => ({ default: module.TermsPage })));
+
+function renderLegalPage(PageComponent) {
+  return (
+    <Suspense fallback={<main className="auth-initializing" role="status">Dokument wird geladen …</main>}>
+      <PageComponent />
+    </Suspense>
+  );
+}
 
 function App() {
   const auth = useGoogleAuth();
 
-  if (auth.isInitializing) {
+  const isLegalPage = window.location.pathname.startsWith('/legal/');
+
+  if (auth.isInitializing && !isLegalPage) {
     return (
       <main className="auth-initializing" role="status" aria-label="Anmeldung wird geprüft">
         <div className="auth-spinner" aria-hidden="true" />
@@ -35,6 +54,10 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/legal/impressum" element={renderLegalPage(ImprintPage)} />
+        <Route path="/legal/datenschutz" element={renderLegalPage(PrivacyPolicyPage)} />
+        <Route path="/legal/agb" element={renderLegalPage(TermsPage)} />
+
         {/* Nicht-eingeloggte User sehen nur die Login-Seite */}
         {!auth.user ? (
           <>

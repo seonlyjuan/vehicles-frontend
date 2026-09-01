@@ -7,6 +7,11 @@ export const isSupabaseConfigured = Boolean(supabaseUrl && supabasePublishableKe
 // The publishable/anon key is safe in a browser. Never put a service-role key here.
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabasePublishableKey, {
-    auth: { detectSessionInUrl: true },
+    auth: {
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: 'pkce',
+      persistSession: true,
+    },
   })
   : null;

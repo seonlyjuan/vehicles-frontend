@@ -30,8 +30,14 @@ export function getVehiclePaymentStatus(vehicleType, vehicleId) {
   return apiRequest(`/vehicles/${vehicleType}/${vehicleId}/payment-status`);
 }
 
-export function publishVehicleListing(vehicleType, vehicleId) {
-  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}/publish`, { method: 'POST' });
+export function publishVehicleListing(vehicleType, vehicleId, termsVersion) {
+  return apiRequest(`/vehicles/${vehicleType}/${vehicleId}/publish`, {
+    method: 'POST',
+    body: {
+      terms_version: termsVersion,
+      terms_accepted: true,
+    },
+  });
 }
 
 export function getVehicleListing(vehicleType, vehicleId) {

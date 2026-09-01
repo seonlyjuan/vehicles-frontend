@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
+import { getCurrentTerms } from '../../api/legal';
 import { getVehiclePaymentStatus, publishVehicleListing } from '../../api/vehicles';
 import { VEHICLE_TYPES } from '../../config/vehicleTypes';
 
@@ -13,7 +14,32 @@ export function VehiclePaymentPage() {
   const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
   const [isChecking, setIsChecking] = useState(isValidVehicleType);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [terms, setTerms] = useState(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isLoadingTerms, setIsLoadingTerms] = useState(isValidVehicleType);
+  const [termsError, setTermsError] = useState('');
   const [error, setError] = useState(isValidVehicleType ? '' : 'Unbekannter Fahrzeugtyp.');
+
+  useEffect(() => {
+    if (!isValidVehicleType) return undefined;
+
+    let active = true;
+    void getCurrentTerms()
+      .then((document) => {
+        if (active) {
+          setTerms(document);
+          setTermsError('');
+        }
+      })
+      .catch((requestError) => {
+        if (active) setTermsError(requestError.message);
+      })
+      .finally(() => {
+        if (active) setIsLoadingTerms(false);
+      });
+
+    return () => { active = false; };
+  }, [isValidVehicleType]);
 
   useEffect(() => {
     if (!isValidVehicleType) return undefined;
@@ -45,13 +71,23 @@ export function VehiclePaymentPage() {
   }, [isValidVehicleType, vehicleId, vehicleType]);
 
   async function handlePublish() {
+    if (!terms || !termsAccepted) {
+      setError('Bitte lies und akzeptiere zuerst die aktuellen AGB.');
+      return;
+    }
     setIsPublishing(true);
     setError('');
     try {
-      await publishVehicleListing(vehicleType, vehicleId);
+      await publishVehicleListing(vehicleType, vehicleId, terms.version);
       navigate(`/vehicles/${vehicleType}/listing/${vehicleId}`, { replace: true });
     } catch (publishError) {
       setError(publishError.message);
+      setTermsAccepted(false);
+      try {
+        setTerms(await getCurrentTerms());
+      } catch (requestError) {
+        setTermsError(requestError.message);
+      }
       setIsPublishing(false);
     }
   }
@@ -71,11 +107,38 @@ export function VehiclePaymentPage() {
         {isChecking ? 'Zahlungsstatus wird geprüft …' : isPaymentSuccessful ? 'Zahlung erfolgreich bestätigt.' : 'Zahlung steht noch aus.'}
       </div>
 
+      <section className="terms-confirmation" aria-labelledby="terms-confirmation-title">
+        <h3 id="terms-confirmation-title">AGB vor der Veröffentlichung bestätigen</h3>
+        {isLoadingTerms && <p>Aktuelle AGB-Version wird geladen …</p>}
+        {termsError && <p className="error" role="alert">{termsError}</p>}
+        {terms && <>
+          <p>
+            Öffne und lies die{' '}
+            <Link to={terms.public_path} target="_blank" rel="noopener noreferrer">
+              AGB ({terms.display_version})
+            </Link>
+            {' '}vor der Veröffentlichung.
+          </p>
+          {terms.status === 'draft' && (
+            <p className="terms-draft-warning">Diese AGB-Version ist ein Entwurf und nur für den lokalen Testbetrieb vorgesehen.</p>
+          )}
+          <label className="terms-checkbox">
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(event) => setTermsAccepted(event.target.checked)}
+            />
+            <span>Ich habe die AGB ({terms.display_version}) gelesen und akzeptiere sie für die Veröffentlichung dieses Inserats.</span>
+          </label>
+          <small>Version, Nutzer, Inserat und Zeitpunkt der Zustimmung werden protokolliert.</small>
+        </>}
+      </section>
+
       {error && <p className="error" role="alert">{error}</p>}
 
       <div className="payment-actions">
         <Link to="/profile/listings"><button className="general_button" type="button">Später fortfahren</button></Link>
-        <button className="general_button payment-publish-button" type="button" disabled={!isPaymentSuccessful || isPublishing} onClick={handlePublish}>
+        <button className="general_button payment-publish-button" type="button" disabled={!isPaymentSuccessful || !termsAccepted || !terms || isPublishing} onClick={handlePublish}>
           {isPublishing ? 'Wird veröffentlicht …' : 'Inserat veröffentlichen'}
         </button>
       </div>
