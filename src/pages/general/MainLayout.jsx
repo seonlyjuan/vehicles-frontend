@@ -1,4 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
+import { LegalFooter } from '../../components/legal/LegalFooter';
 import { useNotifications } from '../../hooks/useNotifications';
 
 export function MainLayout({ user, onSignOut }) {
@@ -41,6 +42,7 @@ export function MainLayout({ user, onSignOut }) {
       <main className="page">
         <Outlet />
       </main>
+      <LegalFooter />
     </div>
   );
 }

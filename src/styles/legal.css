@@ -1,0 +1,34 @@
+.legal-public-layout { display: flex; flex-direction: column; min-height: 100vh; }
+.legal-public-layout .legal-page { flex: 1; }
+
+.legal-document { max-width: 920px; text-align: left; }
+.legal-document-header { padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+.legal-document-header h1 { margin: 12px 0 10px; font-size: clamp(2rem, 5vw, 3rem); }
+.legal-document-header > p { margin: 0; color: var(--muted); font-size: 1.05rem; line-height: 1.65; }
+.legal-draft-badge { display: inline-flex; padding: 6px 10px; color: #854d0e; background: #fef3c7; border: 1px solid #fde68a; border-radius: 999px; font-size: .78rem; font-weight: 800; }
+.legal-document-meta { display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0 0; }
+.legal-document-meta div { display: flex; gap: 7px; }
+.legal-document-meta dt { color: var(--muted); font-weight: 700; }
+.legal-document-meta dd { margin: 0; font-weight: 800; }
+.legal-draft-notice { margin: 24px 0; padding: 16px 18px; color: #854d0e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; line-height: 1.6; }
+.legal-document-content section { padding: 24px 0; border-bottom: 1px solid var(--line); }
+.legal-document-content h2 { margin: 0 0 12px; font-size: 1.35rem; }
+.legal-document-content h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+.legal-document-content p, .legal-document-content li, .legal-document-content address { line-height: 1.75; }
+.legal-document-content p { margin: 10px 0; }
+.legal-document-content ul { margin: 10px 0; padding-left: 24px; }
+.legal-document-content li + li { margin-top: 7px; }
+.legal-document-content address { font-style: normal; }
+.legal-back-link { display: inline-flex; margin-top: 28px; text-decoration: none; }
+
+.legal-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px clamp(18px, 4vw, 48px); color: #cbd5e1; background: #0f172a; border-top: 1px solid rgba(255, 255, 255, .1); }
+.legal-footer p { margin: 0; font-size: .84rem; }
+.legal-footer nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 16px; }
+.legal-footer a { color: #e2e8f0; font-size: .86rem; text-decoration: none; }
+.legal-footer a:hover, .legal-footer a:focus-visible { color: #fff; text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .legal-footer { align-items: flex-start; flex-direction: column; }
+  .legal-footer nav { justify-content: flex-start; }
+  .legal-document-content section { padding: 20px 0; }
+}

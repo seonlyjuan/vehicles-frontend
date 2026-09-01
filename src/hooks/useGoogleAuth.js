@@ -4,6 +4,40 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import { apiRequest } from '../api/client';
 import { updateSellerProfile as saveSellerProfile } from '../api/profile';
 
+const OAUTH_QUERY_PARAMETERS = ['code', 'error', 'error_code', 'error_description'];
+
+function readOAuthCallback() {
+  const url = new URL(window.location.href);
+  const hashParameters = new URLSearchParams(url.hash.slice(1));
+  const error = url.searchParams.get('error_description')
+    ?? url.searchParams.get('error')
+    ?? hashParameters.get('error_description')
+    ?? hashParameters.get('error');
+  const hasAuthFragment = ['access_token', 'refresh_token', ...OAUTH_QUERY_PARAMETERS]
+    .some((parameter) => hashParameters.has(parameter));
+
+  return {
+    error,
+    hasParameters: OAUTH_QUERY_PARAMETERS.some((parameter) => url.searchParams.has(parameter))
+      || hasAuthFragment,
+    hasAuthFragment,
+  };
+}
+
+function clearOAuthCallbackUrl({ hasParameters, hasAuthFragment }) {
+  if (!hasParameters) return;
+
+  const url = new URL(window.location.href);
+  OAUTH_QUERY_PARAMETERS.forEach((parameter) => url.searchParams.delete(parameter));
+  if (hasAuthFragment) url.hash = '';
+
+  window.history.replaceState(
+    {},
+    document.title,
+    `${url.pathname}${url.search}${url.hash}`,
+  );
+}
+
 function toAppUser(user) {
   if (!user) return null;
   const metadata = user.user_metadata ?? {};
@@ -57,29 +91,33 @@ export function useGoogleAuth() {
     });
 
     const finishAuthentication = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const hashParams = new URLSearchParams(window.location.hash.slice(1));
-      const oauthError = params.get('error_description') ?? params.get('error');
-      const hasAuthParameters = params.has('code') || hashParams.has('access_token') || oauthError;
+      const oauthCallback = readOAuthCallback();
 
-      if (oauthError) {
+      if (oauthCallback.error) {
+        clearOAuthCallbackUrl(oauthCallback);
         if (mounted) {
-          setError(oauthError);
+          setError(oauthCallback.error);
           setIsInitializing(false);
         }
         return;
       }
 
-      const result = await supabase.auth.getSession();
+      try {
+        const result = await supabase.auth.getSession();
+        clearOAuthCallbackUrl(oauthCallback);
 
-      if (!mounted) return;
-      if (result.error) {
-        setError(result.error.message);
-      } else {
-        await loadUserProfile(result.data.session?.user);
-        if (hasAuthParameters) window.history.replaceState({}, document.title, window.location.pathname);
+        if (!mounted) return;
+        if (result.error) {
+          setError(result.error.message);
+        } else {
+          await loadUserProfile(result.data.session?.user);
+        }
+      } catch (authenticationError) {
+        if (mounted) setError(authenticationError.message ?? 'Anmeldung fehlgeschlagen.');
+      } finally {
+        clearOAuthCallbackUrl(oauthCallback);
+        if (mounted) setIsInitializing(false);
       }
-      if (mounted) setIsInitializing(false);
     };
 
     void finishAuthentication();
