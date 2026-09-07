@@ -9,7 +9,7 @@ export function LoginPage({ auth }) {
 
   return <div className="dashboard-wrapper">
     <main className="page login-page"><section className="card auth-card">
-      <div className="logo"></div><h1>App-Name<br /></h1>
+      <div className="logo"></div><h1>Farlos<br /></h1>
       <p className="intro">Melde dich sicher mit deinem Google-Konto an.</p>
       <GoogleSignInButton error={auth.error || redirectError} isLoading={auth.isLoading} isConfigured={auth.isGoogleConfigured} onSignIn={auth.signInWithGoogle} />
       <p className="privacy">

@@ -33,8 +33,10 @@ export function ListingManagementActions({ listing, onChange, onDelete, onError 
       {listing.status === 'active' && <button className="general_button" onClick={() => changeStatus('archive')}>Archivieren</button>}
       {listing.status === 'active' && <button className="general_button" onClick={() => changeStatus('mark_sold')}>Verkauft</button>}
       {listing.status === 'archived' && <button className="general_button" onClick={() => changeStatus('reactivate')}>Reaktivieren</button>}
+      {listing.status !== 'draft' && listing.payment_status === 'paid' && (
+        <Link to={`${basePath}/payment`}><button className="general_button">Zahlung &amp; Rückerstattung</button></Link>
+      )}
       <button className="general_button danger-button" onClick={remove}>Löschen</button>
     </div>
   );
 }
-
