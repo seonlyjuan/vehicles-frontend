@@ -119,8 +119,17 @@
 .payment-placeholder { margin: 26px 0 18px; padding: 30px 20px; border: 2px dashed #a8bde2; border-radius: 16px; color: #334155; background: #f8fafc; }
 .payment-placeholder strong { color: var(--primary-dark); font-size: 1.25rem; }
 .payment-placeholder p { color: var(--muted); margin: 8px 0 0; }
+.payment-summary { margin: 18px 0; padding: 20px; text-align: left; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.payment-summary h3 { margin: 0 0 12px; }
+.payment-summary dl { margin: 0; }
+.payment-summary dl > div { display: flex; justify-content: space-between; gap: 20px; padding: 8px 0; }
+.payment-summary dt, .payment-summary dd { margin: 0; }
+.payment-summary dd { font-variant-numeric: tabular-nums; font-weight: 700; }
+.payment-summary-total { margin-top: 6px; padding-top: 14px !important; border-top: 1px solid var(--line); font-size: 1.08rem; }
+.payment-summary small, .refund-form small, .refund-status small { display: block; margin-top: 8px; color: var(--muted); }
 .payment-status { margin: 18px 0; padding: 13px 16px; border: 1px solid #fde68a; border-radius: 11px; color: #854d0e; background: #fefce8; font-weight: 700; }
 .payment-status-success { color: #067647; background: #ecfdf3; border-color: #abefc6; }
+.payment-email-note { padding: 11px 14px; color: #175cd3; background: #eff8ff; border: 1px solid #b2ddff; border-radius: 10px; }
 .terms-confirmation { margin: 20px 0; padding: 20px; text-align: left; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
 .terms-confirmation h3 { margin: 0 0 10px; }
 .terms-confirmation p { line-height: 1.6; }
@@ -131,6 +140,17 @@
 .payment-actions { display: flex; justify-content: center; gap: 12px; margin-top: 22px; }
 .payment-actions a { text-decoration: none; }
 .payment-publish-button { color: #fff; background: var(--primary); border-color: var(--primary); }
+.refund-section { margin: 20px 0; padding: 20px; text-align: left; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
+.refund-section h3 { margin: 0 0 12px; }
+.refund-form { display: grid; gap: 10px; }
+.refund-form label { font-weight: 700; }
+.refund-form textarea { width: 100%; padding: 11px 12px; border: 1px solid #cbd6e4; border-radius: 10px; resize: vertical; }
+.refund-form button { justify-self: start; }
+.refund-status { padding: 14px; border: 1px solid #b2ddff; border-radius: 10px; background: #eff8ff; }
+.refund-status p { margin: 7px 0 0; }
+.refund-status-approved { color: #175cd3; }
+.refund-status-completed { color: #067647; border-color: #abefc6; background: #ecfdf3; }
+.refund-rejected { padding: 10px 12px; color: #b42318; background: #fff5f4; border: 1px solid #fecdca; border-radius: 9px; }
 
 .messages-card, .conversation-card { max-width: 820px; text-align: left; }
 .messages-empty { padding: 28px; color: var(--muted); background: var(--surface-soft); border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; }
