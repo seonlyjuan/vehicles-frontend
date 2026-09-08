@@ -1,4 +1,8 @@
 # Client lokal und im WLAN starten
+
+Deployment-Anleitung: [DEPLOYMENT.md](DEPLOYMENT.md) – Produktionsbuild,
+Konfiguration, Docker, Routing und automatische Prüfungen.
+
 --------------------------------------------------------------------------------
 
 ```powershell

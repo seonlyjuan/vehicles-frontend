@@ -1,0 +1,38 @@
+name: Client checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VITE_API_URL: https://api.example.invalid
+      VITE_SUPABASE_URL: https://example.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci-build-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Build static web container
+        run: >-
+          docker build -t vehicle-client:ci
+          --build-arg VITE_API_URL
+          --build-arg VITE_SUPABASE_URL
+          --build-arg VITE_SUPABASE_PUBLISHABLE_KEY .
+      - name: Check direct routes and missing assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --name vehicle-client-ci -p 127.0.0.1:8080:8080 vehicle-client:ci
+          trap 'docker logs vehicle-client-ci; docker rm -f vehicle-client-ci' EXIT
+          curl --retry 10 --retry-connrefused --retry-delay 1 --fail http://127.0.0.1:8080/health
+          curl --fail http://127.0.0.1:8080/legal/agb | grep -q 'id="root"'
+          curl --fail http://127.0.0.1:8080/profile/settings | grep -q 'id="root"'
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/assets/missing.js)" = 404

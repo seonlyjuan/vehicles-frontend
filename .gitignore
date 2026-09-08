@@ -1,5 +1,8 @@
 # Local configuration
 .env
+.env.*
+!.env.example
+!.env.production.example
 
 # Generated files
 dist/

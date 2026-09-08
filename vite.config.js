@@ -1,24 +1,9 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-
-function getOrigin(value) {
-  try {
-    return value ? new URL(value).origin : null
-  } catch {
-    return null
-  }
-}
-
-function requireHttpsOrigin(env, variableName) {
-  const value = env[variableName]
-  const origin = getOrigin(value)
-  if (!origin || !origin.startsWith('https://')) {
-    throw new Error(`${variableName} must be an absolute HTTPS URL for a production build.`)
-  }
-  return origin
-}
+import { requireHttpsOrigin, requirePublicSupabaseKey } from './build/production-env.js'
 
 function createContentSecurityPolicy(env) {
+  requirePublicSupabaseKey(env)
   const apiOrigin = requireHttpsOrigin(env, 'VITE_API_URL')
   const supabaseOrigin = requireHttpsOrigin(env, 'VITE_SUPABASE_URL')
   const realtimeOrigin = supabaseOrigin?.replace(/^https:/, 'wss:')
